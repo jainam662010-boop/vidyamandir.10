@@ -1,0 +1,600 @@
+{
+  "subjects": [
+    {
+      "id": "mathematics",
+      "name": "Mathematics",
+      "nameHi": "गणित",
+      "icon": "📐",
+      "color": "#D4A017",
+      "gradient": "linear-gradient(135deg,#D4A017,#9A7210)",
+      "glow": "rgba(212,160,23,0.10)",
+      "bg": "rgba(212,160,23,0.09)",
+      "border": "rgba(212,160,23,0.22)",
+      "description": "Number Systems, Algebra, Geometry, Trigonometry & Statistics",
+      "chapters": [
+        {
+          "id": "real-numbers",
+          "title": "Real Numbers",
+          "titleHi": "वास्तविक संख्याएँ",
+          "duration": "45 min",
+          "lessons": [
+            { "id": "l1", "title": "Introduction & Euclid's Lemma", "videoId": "ySWSfMiFoFk", "duration": "12:30" },
+            { "id": "l2", "title": "Fundamental Theorem of Arithmetic", "videoId": "p3MVgVTj9Vs", "duration": "18:45" }
+          ],
+          "ncertTopics": [
+            { "text": "Euclid's Division Lemma: a = bq + r, 0 ≤ r < b", "marks": "3", "important": true, "type": "theorem" },
+            { "text": "Fundamental Theorem of Arithmetic — Unique Prime Factorization", "marks": "3", "important": true, "type": "theorem" },
+            { "text": "Proof that √2, √3 are irrational numbers", "marks": "3", "important": true, "type": "proof" },
+            { "text": "HCF and LCM using prime factorization", "marks": "2", "important": true, "type": "concept" },
+            { "text": "Decimal expansions of rational numbers (terminating / non-terminating)", "marks": "2", "important": false, "type": "concept" }
+          ],
+          "notes": {
+            "content": [
+              { "type": "intro", "text": "Real numbers include all rational and irrational numbers. This chapter lays the foundation for all of Number Theory in Class 10." },
+              { "type": "heading", "text": "Euclid's Division Lemma" },
+              { "type": "text", "text": "For positive integers a and b, there exist unique integers q and r such that:\na = bq + r,  where 0 ≤ r < b" },
+              { "type": "formula", "text": "a = bq + r  →  HCF(a,b) = HCF(b,r)" },
+              { "type": "keypoint", "text": "Every composite number can be expressed as a product of primes in a unique way (Fundamental Theorem of Arithmetic)." },
+              { "type": "heading", "text": "Irrational Numbers" },
+              { "type": "text", "text": "Numbers that cannot be written as p/q. Examples: √2, √3, √5, π, e" },
+              { "type": "keypoint", "text": "If p is a prime and p divides a², then p divides a (Key lemma for irrationality proofs)." },
+              { "type": "example", "question": "Find HCF of 135 and 225 using Euclid's algorithm.", "answer": "225 = 135×1 + 90\n135 = 90×1 + 45\n90 = 45×2 + 0\n∴ HCF = 45" }
+            ]
+          },
+          "quiz": [
+            { "q": "Euclid's Division Lemma: a = bq + r where r satisfies:", "options": ["0 ≤ r < b", "r > b", "r = 0", "r ≥ b"], "answer": 0 },
+            { "q": "Which of the following is irrational?", "options": ["√4", "0.125", "√2", "22/7"], "answer": 2 },
+            { "q": "HCF of 12 and 18 using prime factorization:", "options": ["2", "6", "36", "3"], "answer": 1 },
+            { "q": "Decimal expansion of 17/8 is:", "options": ["Non-terminating repeating", "Terminating", "Non-terminating non-repeating", "None"], "answer": 1 }
+          ],
+          "teachers": [{ "name": "Vedantu Math", "channel": "Vedantu", "avatar": "V", "color": "#D4A017" }]
+        },
+        {
+          "id": "polynomials",
+          "title": "Polynomials",
+          "titleHi": "बहुपद",
+          "duration": "50 min",
+          "lessons": [
+            { "id": "l1", "title": "Zeroes of Polynomials", "videoId": "ffLLmV51l3Y", "duration": "15:20" },
+            { "id": "l2", "title": "Division Algorithm", "videoId": "VYpNG5Nj0ek", "duration": "20:10" }
+          ],
+          "ncertTopics": [
+            { "text": "Relationship between zeroes and coefficients of quadratic polynomial", "marks": "3", "important": true, "type": "formula" },
+            { "text": "Division Algorithm for polynomials: p(x) = g(x)·q(x) + r(x)", "marks": "3", "important": true, "type": "theorem" },
+            { "text": "Finding zeroes of quadratic polynomials geometrically", "marks": "2", "important": true, "type": "concept" },
+            { "text": "Cubic polynomial: sum of zeroes, sum of product of pairs, product of zeroes", "marks": "3", "important": false, "type": "formula" }
+          ],
+          "notes": {
+            "content": [
+              { "type": "intro", "text": "A polynomial p(x) = aₙxⁿ + … + a₀. The degree is the highest power." },
+              { "type": "heading", "text": "Zeroes and Coefficients" },
+              { "type": "text", "text": "For ax² + bx + c with zeroes α and β:" },
+              { "type": "formula", "text": "α + β = –b/a    |    α·β = c/a" },
+              { "type": "keypoint", "text": "Geometrically: zeroes = x-intercepts of the parabola y = ax² + bx + c" },
+              { "type": "example", "question": "If α, β are zeroes of 2x² – 7x + 3, find α + β and α·β.", "answer": "α + β = 7/2,  α·β = 3/2" }
+            ]
+          },
+          "quiz": [
+            { "q": "For ax² + bx + c, sum of zeroes =", "options": ["c/a", "–b/a", "b/a", "–c/a"], "answer": 1 },
+            { "q": "Max zeroes of a cubic polynomial:", "options": ["1", "2", "3", "4"], "answer": 2 },
+            { "q": "Product of zeroes of 2x² – 8x + 6:", "options": ["4", "3", "–4", "–3"], "answer": 1 },
+            { "q": "Degree of polynomial 3x³ – 2x² + x – 5:", "options": ["1", "2", "3", "5"], "answer": 2 }
+          ],
+          "teachers": [{ "name": "Khan Academy", "channel": "Khan Academy", "avatar": "K", "color": "#4A7A3A" }]
+        },
+        {
+          "id": "linear-equations",
+          "title": "Pair of Linear Equations",
+          "titleHi": "रैखिक समीकरण युग्म",
+          "duration": "60 min",
+          "lessons": [
+            { "id": "l1", "title": "Methods of Solving", "videoId": "RdehfQJ8i_0", "duration": "22:00" }
+          ],
+          "ncertTopics": [
+            { "text": "Graphical method — intersection point is the solution", "marks": "2", "important": true, "type": "concept" },
+            { "text": "Substitution and Elimination methods", "marks": "3", "important": true, "type": "method" },
+            { "text": "Cross-multiplication method", "marks": "3", "important": true, "type": "method" },
+            { "text": "Consistency conditions: a₁/a₂, b₁/b₂, c₁/c₂ ratios", "marks": "3", "important": true, "type": "concept" },
+            { "text": "Word problems on age, coins, fraction, geometry, speed", "marks": "5", "important": true, "type": "application" }
+          ],
+          "notes": {
+            "content": [
+              { "type": "intro", "text": "Two equations: a₁x + b₁y + c₁ = 0 and a₂x + b₂y + c₂ = 0" },
+              { "type": "heading", "text": "Consistency Conditions" },
+              { "type": "formula", "text": "a₁/a₂ ≠ b₁/b₂  → Unique solution (Consistent)\na₁/a₂ = b₁/b₂ = c₁/c₂ → Infinite solutions\na₁/a₂ = b₁/b₂ ≠ c₁/c₂ → No solution" },
+              { "type": "keypoint", "text": "Elimination: multiply equations to make coefficients of one variable equal, then add/subtract." }
+            ]
+          },
+          "quiz": [
+            { "q": "x + y = 5, x – y = 1 → x =", "options": ["2", "3", "4", "1"], "answer": 1 },
+            { "q": "Lines with no solution are:", "options": ["Concurrent", "Parallel", "Coincident", "Perpendicular"], "answer": 1 },
+            { "q": "If a₁/a₂ = b₁/b₂ = c₁/c₂, the system has:", "options": ["No solution", "Unique solution", "Infinite solutions", "Two solutions"], "answer": 2 }
+          ],
+          "teachers": [{ "name": "BYJU'S Math", "channel": "BYJU'S", "avatar": "B", "color": "#C85A3C" }]
+        },
+        {
+          "id": "triangles",
+          "title": "Triangles",
+          "titleHi": "त्रिभुज",
+          "duration": "55 min",
+          "lessons": [
+            { "id": "l1", "title": "Similar Triangles & BPT", "videoId": "B3PFTYLkOFY", "duration": "22:00" }
+          ],
+          "ncertTopics": [
+            { "text": "Basic Proportionality Theorem (Thales Theorem) and its converse", "marks": "3", "important": true, "type": "theorem" },
+            { "text": "Criteria of similarity: AA, SAS, SSS", "marks": "3", "important": true, "type": "theorem" },
+            { "text": "Ratio of areas of similar triangles = square of ratio of sides", "marks": "3", "important": true, "type": "theorem" },
+            { "text": "Pythagoras Theorem proof and converse", "marks": "5", "important": true, "type": "proof" }
+          ],
+          "notes": {
+            "content": [
+              { "type": "intro", "text": "Two triangles are similar if corresponding angles are equal and sides are proportional." },
+              { "type": "heading", "text": "Basic Proportionality Theorem (BPT)" },
+              { "type": "text", "text": "If DE ∥ BC in △ABC, then AD/DB = AE/EC" },
+              { "type": "formula", "text": "ar(△ABC)/ar(△DEF) = (AB/DE)² = (BC/EF)² = (AC/DF)²" },
+              { "type": "keypoint", "text": "Pythagoras: In a right triangle, hypotenuse² = sum of squares of other two sides." }
+            ]
+          },
+          "quiz": [
+            { "q": "BPT is also known as:", "options": ["Pythagoras Theorem", "Thales Theorem", "Midpoint Theorem", "Angle Bisector Theorem"], "answer": 1 },
+            { "q": "Ratio of areas of similar triangles with sides ratio 2:3:", "options": ["2:3", "4:9", "8:27", "6:9"], "answer": 1 },
+            { "q": "In △ABC, if DE ∥ BC and AD = 3, DB = 5, AE = 6, then EC =", "options": ["8", "10", "12", "9"], "answer": 1 }
+          ],
+          "teachers": [{ "name": "Doubtnut", "channel": "Doubtnut", "avatar": "D", "color": "#5A8FAA" }]
+        },
+        {
+          "id": "trigonometry",
+          "title": "Trigonometry",
+          "titleHi": "त्रिकोणमिति",
+          "duration": "65 min",
+          "lessons": [
+            { "id": "l1", "title": "Trigonometric Ratios & Identities", "videoId": "F21S9Wpi0y8", "duration": "25:00" }
+          ],
+          "ncertTopics": [
+            { "text": "Trigonometric ratios: sin, cos, tan, cosec, sec, cot", "marks": "2", "important": true, "type": "concept" },
+            { "text": "Values at 0°, 30°, 45°, 60°, 90° — must memorize", "marks": "3", "important": true, "type": "table" },
+            { "text": "Fundamental Identity: sin²θ + cos²θ = 1", "marks": "3", "important": true, "type": "identity" },
+            { "text": "Complementary angles: sin(90–θ) = cosθ", "marks": "2", "important": true, "type": "concept" },
+            { "text": "Heights and Distances — angle of elevation, depression", "marks": "5", "important": true, "type": "application" }
+          ],
+          "notes": {
+            "content": [
+              { "type": "intro", "text": "Trigonometry: the study of relationships between sides and angles of right triangles." },
+              { "type": "heading", "text": "Ratios in Right △ABC (right angle at B)" },
+              { "type": "formula", "text": "sinA = BC/AC   cosA = AB/AC   tanA = BC/AB\ncosecA = AC/BC  secA = AC/AB  cotA = AB/BC" },
+              { "type": "heading", "text": "Standard Values Table" },
+              { "type": "text", "text": "Angle:  0°   30°   45°   60°   90°\nsin:    0    1/2   1/√2  √3/2   1\ncos:    1   √3/2  1/√2   1/2   0\ntan:    0   1/√3   1     √3   undef" },
+              { "type": "keypoint", "text": "sin²θ + cos²θ = 1 (most frequently used identity in board exams)" },
+              { "type": "example", "question": "Tower height if angle of elevation is 60° from 20m away.", "answer": "height = 20 × tan60° = 20√3 m ≈ 34.64 m" }
+            ]
+          },
+          "quiz": [
+            { "q": "sin 30° =", "options": ["1", "√3/2", "1/2", "1/√2"], "answer": 2 },
+            { "q": "tan 45° =", "options": ["0", "1", "√3", "undefined"], "answer": 1 },
+            { "q": "sin²θ + cos²θ =", "options": ["0", "2", "1", "–1"], "answer": 2 },
+            { "q": "Value of sin(90° – θ) is:", "options": ["sinθ", "cosθ", "tanθ", "–sinθ"], "answer": 1 }
+          ],
+          "teachers": [{ "name": "Vedantu Math", "channel": "Vedantu", "avatar": "V", "color": "#D4A017" }]
+        }
+      ]
+    },
+    {
+      "id": "science",
+      "name": "Science",
+      "nameHi": "विज्ञान",
+      "icon": "🔬",
+      "color": "#4A7A3A",
+      "gradient": "linear-gradient(135deg,#4A7A3A,#2A5A1A)",
+      "glow": "rgba(74,122,58,0.10)",
+      "bg": "rgba(74,122,58,0.09)",
+      "border": "rgba(74,122,58,0.22)",
+      "description": "Physics, Chemistry & Biology (CBSE NCERT)",
+      "chapters": [
+        {
+          "id": "chemical-reactions",
+          "title": "Chemical Reactions & Equations",
+          "titleHi": "रासायनिक अभिक्रियाएँ",
+          "duration": "50 min",
+          "lessons": [
+            { "id": "l1", "title": "Types of Chemical Reactions", "videoId": "AcAgkU4AUUE", "duration": "20:00" },
+            { "id": "l2", "title": "Balancing Equations", "videoId": "RnGe_9kbGgE", "duration": "15:00" }
+          ],
+          "ncertTopics": [
+            { "text": "Balancing chemical equations — Law of Conservation of Mass", "marks": "3", "important": true, "type": "concept" },
+            { "text": "Types: Combination, Decomposition, Displacement, Double Displacement, Redox", "marks": "3", "important": true, "type": "concept" },
+            { "text": "Exothermic vs Endothermic reactions with examples", "marks": "2", "important": true, "type": "concept" },
+            { "text": "Corrosion and Rancidity — prevention methods", "marks": "2", "important": true, "type": "application" }
+          ],
+          "notes": {
+            "content": [
+              { "type": "intro", "text": "Chemical reactions involve breaking and forming bonds, converting reactants into products." },
+              { "type": "heading", "text": "Types of Reactions" },
+              { "type": "text", "text": "1. Combination: A + B → AB (e.g., 2Mg + O₂ → 2MgO)\n2. Decomposition: AB → A + B (e.g., 2H₂O → 2H₂ + O₂)\n3. Displacement: A + BC → AC + B\n4. Double Displacement: AB + CD → AD + CB\n5. Redox: simultaneous oxidation + reduction" },
+              { "type": "keypoint", "text": "Exothermic: releases energy. Endothermic: absorbs energy." },
+              { "type": "example", "question": "Balance: Fe + O₂ → Fe₂O₃", "answer": "4Fe + 3O₂ → 2Fe₂O₃" }
+            ]
+          },
+          "quiz": [
+            { "q": "Fe + CuSO₄ → FeSO₄ + Cu is:", "options": ["Combination", "Decomposition", "Displacement", "Double displacement"], "answer": 2 },
+            { "q": "Exothermic reaction releases:", "options": ["Light only", "Energy to surroundings", "Energy from surroundings", "CO₂"], "answer": 1 },
+            { "q": "Balanced: H₂ + O₂ → H₂O:", "options": ["H₂+O₂→H₂O", "2H₂+O₂→2H₂O", "H₂+2O₂→H₂O", "4H₂+O₂→2H₂O"], "answer": 1 }
+          ],
+          "teachers": [{ "name": "Vedantu Science", "channel": "Vedantu", "avatar": "V", "color": "#4A7A3A" }]
+        },
+        {
+          "id": "acids-bases",
+          "title": "Acids, Bases and Salts",
+          "titleHi": "अम्ल, क्षार और लवण",
+          "duration": "55 min",
+          "lessons": [
+            { "id": "l1", "title": "Properties & Reactions", "videoId": "KgIHaBDCOGE", "duration": "20:00" }
+          ],
+          "ncertTopics": [
+            { "text": "pH scale: below 7 acidic, 7 neutral, above 7 basic", "marks": "2", "important": true, "type": "concept" },
+            { "text": "Preparation of NaOH by Chlor-Alkali process", "marks": "3", "important": true, "type": "process" },
+            { "text": "Preparation and uses of Baking Soda (NaHCO₃) and Washing Soda (Na₂CO₃)", "marks": "3", "important": true, "type": "compound" },
+            { "text": "Plaster of Paris: CaSO₄·½H₂O preparation and uses", "marks": "2", "important": true, "type": "compound" }
+          ],
+          "notes": {
+            "content": [
+              { "type": "intro", "text": "Acids produce H⁺ ions, bases produce OH⁻ ions. pH measures acidity." },
+              { "type": "formula", "text": "Acid + Base → Salt + Water (Neutralization)" },
+              { "type": "keypoint", "text": "Common bases: NaOH (caustic soda), KOH, Ca(OH)₂ (lime water)" },
+              { "type": "keypoint", "text": "Baking soda = NaHCO₃. Washing soda = Na₂CO₃·10H₂O. Bleaching powder = CaOCl₂" }
+            ]
+          },
+          "quiz": [
+            { "q": "pH of pure water:", "options": ["0", "7", "14", "1"], "answer": 1 },
+            { "q": "Common name of NaHCO₃:", "options": ["Washing soda", "Baking soda", "Bleaching powder", "Plaster of Paris"], "answer": 1 },
+            { "q": "Chlor-Alkali process produces:", "options": ["HCl", "NaOH", "NaCl", "Both NaOH and Cl₂"], "answer": 3 }
+          ],
+          "teachers": [{ "name": "BYJU'S Science", "channel": "BYJU'S", "avatar": "B", "color": "#C85A3C" }]
+        },
+        {
+          "id": "life-processes",
+          "title": "Life Processes",
+          "titleHi": "जैव प्रक्रम",
+          "duration": "65 min",
+          "lessons": [
+            { "id": "l1", "title": "Nutrition & Respiration", "videoId": "Gim5YuqiPnw", "duration": "22:00" },
+            { "id": "l2", "title": "Transportation & Excretion", "videoId": "X9ZZ6tcxArI", "duration": "20:00" }
+          ],
+          "ncertTopics": [
+            { "text": "Photosynthesis equation and factors affecting it", "marks": "3", "important": true, "type": "process" },
+            { "text": "Aerobic vs Anaerobic respiration with equations", "marks": "3", "important": true, "type": "process" },
+            { "text": "Double circulation in humans — systemic & pulmonary", "marks": "3", "important": true, "type": "concept" },
+            { "text": "Nephron structure and function — urine formation", "marks": "5", "important": true, "type": "diagram" }
+          ],
+          "notes": {
+            "content": [
+              { "type": "intro", "text": "Life processes: Nutrition, Respiration, Transportation, Excretion — essential maintenance activities." },
+              { "type": "formula", "text": "6CO₂ + 6H₂O + Light → C₆H₁₂O₆ + 6O₂  [Photosynthesis]" },
+              { "type": "formula", "text": "C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + 38 ATP  [Aerobic]" },
+              { "type": "keypoint", "text": "Human heart: 4 chambers. Blood: RA → RV → Lungs → LA → LV → Body" }
+            ]
+          },
+          "quiz": [
+            { "q": "Photosynthesis occurs in:", "options": ["Mitochondria", "Nucleus", "Chloroplast", "Ribosome"], "answer": 2 },
+            { "q": "ATP produced in aerobic respiration:", "options": ["2", "20", "38", "40"], "answer": 2 },
+            { "q": "Pulmonary vein carries:", "options": ["Deoxygenated blood", "Oxygenated blood", "Both", "Lymph"], "answer": 1 }
+          ],
+          "teachers": [{ "name": "BYJU'S Biology", "channel": "BYJU'S", "avatar": "B", "color": "#4A7A3A" }]
+        },
+        {
+          "id": "metals-nonmetals",
+          "title": "Metals and Non-Metals",
+          "titleHi": "धातु और अधातु",
+          "duration": "60 min",
+          "lessons": [
+            { "id": "l1", "title": "Properties and Reactivity", "videoId": "DptA9VDwgCc", "duration": "22:00" }
+          ],
+          "ncertTopics": [
+            { "text": "Physical properties: lustre, malleability, ductility, conductivity", "marks": "2", "important": true, "type": "concept" },
+            { "text": "Reactivity Series (K, Na, Ca, Mg, Al, Zn, Fe, Pb, H, Cu, Ag, Au)", "marks": "3", "important": true, "type": "table" },
+            { "text": "Ionic bond formation — electron transfer examples", "marks": "3", "important": true, "type": "concept" },
+            { "text": "Extraction of metals — ore, minerals, gangue, smelting, refining", "marks": "5", "important": true, "type": "process" }
+          ],
+          "notes": {
+            "content": [
+              { "type": "intro", "text": "Metals: lustrous, malleable, ductile, good conductors. Non-metals: dull, brittle, poor conductors." },
+              { "type": "formula", "text": "Reactivity: K > Na > Ca > Mg > Al > Zn > Fe > Pb > H > Cu > Ag > Au" },
+              { "type": "keypoint", "text": "More reactive metals displace less reactive metals from their salt solutions." }
+            ]
+          },
+          "quiz": [
+            { "q": "Most reactive metal:", "options": ["Gold", "Iron", "Potassium", "Copper"], "answer": 2 },
+            { "q": "Ductility means:", "options": ["Hardness", "Can be drawn into wires", "Melting point", "Conductivity"], "answer": 1 },
+            { "q": "Non-metal that conducts electricity:", "options": ["Sulfur", "Phosphorus", "Graphite", "Iodine"], "answer": 2 }
+          ],
+          "teachers": [{ "name": "Vedantu Chemistry", "channel": "Vedantu", "avatar": "V", "color": "#D4A017" }]
+        },
+        {
+          "id": "carbon-compounds",
+          "title": "Carbon and its Compounds",
+          "titleHi": "कार्बन और उसके यौगिक",
+          "duration": "70 min",
+          "lessons": [
+            { "id": "l1", "title": "Catenation, Homologous Series", "videoId": "Rd4a1X3B61w", "duration": "25:00" }
+          ],
+          "ncertTopics": [
+            { "text": "Catenation and Tetravalency of carbon — reason for vast organic chemistry", "marks": "2", "important": true, "type": "concept" },
+            { "text": "Functional groups: -OH, -CHO, -COOH, -NH₂, Halogens", "marks": "3", "important": true, "type": "table" },
+            { "text": "Ethanol and Ethanoic acid — properties and reactions", "marks": "3", "important": true, "type": "compound" },
+            { "text": "Soaps and Detergents — micelle formation, cleansing action", "marks": "3", "important": true, "type": "application" }
+          ],
+          "notes": {
+            "content": [
+              { "type": "intro", "text": "Carbon's catenation ability and tetravalency give it an unmatched diversity of compounds." },
+              { "type": "formula", "text": "Alkanes: CₙH₂ₙ₊₂   Alkenes: CₙH₂ₙ   Alkynes: CₙH₂ₙ₋₂" },
+              { "type": "keypoint", "text": "Soap: sodium/potassium salt of long chain fatty acid. Has hydrophilic head + hydrophobic tail → micelle." }
+            ]
+          },
+          "quiz": [
+            { "q": "Valency of carbon:", "options": ["2", "4", "6", "1"], "answer": 1 },
+            { "q": "Ethanoic acid common name:", "options": ["Methanol", "Acetic acid", "Ethanol", "Formic acid"], "answer": 1 },
+            { "q": "Alkenes general formula:", "options": ["CₙH₂ₙ₊₂", "CₙH₂ₙ", "CₙH₂ₙ₋₂", "CₙHₙ"], "answer": 1 }
+          ],
+          "teachers": [{ "name": "Khan Academy", "channel": "Khan Academy", "avatar": "K", "color": "#4A7A3A" }]
+        }
+      ]
+    },
+    {
+      "id": "social-science",
+      "name": "Social Science",
+      "nameHi": "सामाजिक विज्ञान",
+      "icon": "🌍",
+      "color": "#C85A3C",
+      "gradient": "linear-gradient(135deg,#C85A3C,#8A3A20)",
+      "glow": "rgba(200,90,60,0.10)",
+      "bg": "rgba(200,90,60,0.08)",
+      "border": "rgba(200,90,60,0.22)",
+      "description": "History, Geography, Political Science & Economics",
+      "chapters": [
+        {
+          "id": "nationalism-europe",
+          "title": "The Rise of Nationalism in Europe",
+          "titleHi": "यूरोप में राष्ट्रवाद का उदय",
+          "duration": "55 min",
+          "lessons": [
+            { "id": "l1", "title": "French Revolution & Nationalism", "videoId": "VT69NhHtTaQ", "duration": "20:00" }
+          ],
+          "ncertTopics": [
+            { "text": "Frederic Sorrieu's vision of a democratic and social republic", "marks": "3", "important": true, "type": "concept" },
+            { "text": "Allegories: Germania, Marianne, Britannia, Italia — significance", "marks": "3", "important": true, "type": "concept" },
+            { "text": "Unification of Germany under Bismarck — 'blood and iron' policy", "marks": "5", "important": true, "type": "event" },
+            { "text": "Frankfurt Parliament 1848 — composition, demands, failure", "marks": "3", "important": true, "type": "event" },
+            { "text": "Role of Mazzini, Garibaldi, Cavour in Italian unification", "marks": "3", "important": true, "type": "person" }
+          ],
+          "notes": {
+            "content": [
+              { "type": "intro", "text": "19th century Europe saw the birth of nation-states driven by nationalism, culture, language, and shared history." },
+              { "type": "heading", "text": "Key Events" },
+              { "type": "text", "text": "• 1789: French Revolution — ideas of liberté, égalité, fraternité\n• 1848: Year of Revolutions across Europe\n• 1871: German unification (Prussian king → German Kaiser)" },
+              { "type": "keypoint", "text": "'Germania' symbolized the German nation; wore a crown of oak leaves (symbol of heroism)." },
+              { "type": "example", "question": "What was the significance of the Frankfurt Parliament?", "answer": "1848 assembly of German liberal nationalists who drafted a constitution; failed as Frederick William IV refused the crown offered by elected assembly." }
+            ]
+          },
+          "quiz": [
+            { "q": "Who founded Young Italy?", "options": ["Bismarck", "Cavour", "Garibaldi", "Mazzini"], "answer": 3 },
+            { "q": "Allegory of German Nation:", "options": ["Marianne", "Germania", "Britannia", "Italia"], "answer": 1 },
+            { "q": "Bismarck united Germany using:", "options": ["Diplomacy only", "Elections", "Blood and Iron", "Revolution"], "answer": 2 }
+          ],
+          "teachers": [{ "name": "Magnet Brains", "channel": "Magnet Brains", "avatar": "M", "color": "#C85A3C" }]
+        },
+        {
+          "id": "resources-development",
+          "title": "Resources and Development",
+          "titleHi": "संसाधन और विकास",
+          "duration": "50 min",
+          "lessons": [
+            { "id": "l1", "title": "Types and Classification of Resources", "videoId": "R0piMGbDJ5M", "duration": "18:00" }
+          ],
+          "ncertTopics": [
+            { "text": "Classification: Biotic/Abiotic, Renewable/Non-renewable, Individual/Community/National/International", "marks": "3", "important": true, "type": "concept" },
+            { "text": "Land use pattern in India — net sown area, forest, barren land", "marks": "3", "important": true, "type": "data" },
+            { "text": "Soil types in India: Alluvial, Black (Regur), Red, Laterite, Desert soil", "marks": "5", "important": true, "type": "table" },
+            { "text": "Soil erosion and conservation — contour ploughing, terrace farming, shelter belt", "marks": "3", "important": true, "type": "concept" }
+          ],
+          "notes": {
+            "content": [
+              { "type": "intro", "text": "Resources: anything available in the environment to satisfy human needs, having utility and technology to access." },
+              { "type": "keypoint", "text": "India: 2.4% world's land area, 17% world's population — huge pressure on resources." },
+              { "type": "keypoint", "text": "Alluvial soil — most fertile, found in Indo-Gangetic plains, supports rice, wheat, sugarcane." }
+            ]
+          },
+          "quiz": [
+            { "q": "Regur soil is also called:", "options": ["Alluvial", "Black soil", "Red soil", "Laterite"], "answer": 1 },
+            { "q": "Renewable resource:", "options": ["Coal", "Petroleum", "Solar energy", "Natural gas"], "answer": 2 },
+            { "q": "Rio Earth Summit was held in:", "options": ["1990", "1992", "1995", "2000"], "answer": 1 }
+          ],
+          "teachers": [{ "name": "Geography Guru", "channel": "Padhle", "avatar": "P", "color": "#4A7A3A" }]
+        },
+        {
+          "id": "power-sharing",
+          "title": "Power Sharing",
+          "titleHi": "सत्ता की साझेदारी",
+          "duration": "45 min",
+          "lessons": [
+            { "id": "l1", "title": "Why Power Sharing is Desirable", "videoId": "5jXiGVHyHnk", "duration": "16:00" }
+          ],
+          "ncertTopics": [
+            { "text": "Belgium model vs Sri Lanka model — outcomes compared", "marks": "5", "important": true, "type": "case_study" },
+            { "text": "Four forms of power sharing: organs, levels, social groups, parties", "marks": "3", "important": true, "type": "concept" },
+            { "text": "Majoritarianism in Sri Lanka — causes and effects on Tamils", "marks": "3", "important": true, "type": "event" },
+            { "text": "Prudential and Moral reasons for power sharing", "marks": "2", "important": true, "type": "concept" }
+          ],
+          "notes": {
+            "content": [
+              { "type": "intro", "text": "Power sharing prevents concentration of power, reduces conflict, ensures stability in plural democracies." },
+              { "type": "heading", "text": "Forms of Power Sharing" },
+              { "type": "text", "text": "1. Horizontal — Legislature, Executive, Judiciary\n2. Vertical — Federal, State, Local\n3. Social groups — community governments\n4. Political parties, pressure groups, movements" },
+              { "type": "keypoint", "text": "Belgium: Dutch + French + German speakers → community governments. A model of accommodation." }
+            ]
+          },
+          "quiz": [
+            { "q": "Belgium shares power between:", "options": ["2 communities", "3 communities", "4 communities", "5 communities"], "answer": 1 },
+            { "q": "Horizontal power sharing:", "options": ["Between Centre and State", "Organs of government", "Social groups", "Political parties"], "answer": 1 },
+            { "q": "Sri Lanka's Official Language Act (1956) made ___ the only official language:", "options": ["Tamil", "Sinhala", "English", "Pali"], "answer": 1 }
+          ],
+          "teachers": [{ "name": "Civics Educator", "channel": "Unacademy", "avatar": "U", "color": "#5A8FAA" }]
+        },
+        {
+          "id": "development",
+          "title": "Development",
+          "titleHi": "विकास",
+          "duration": "45 min",
+          "lessons": [
+            { "id": "l1", "title": "What is Development?", "videoId": "OupPfJCIUWM", "duration": "16:00" }
+          ],
+          "ncertTopics": [
+            { "text": "National Development vs Individual Goals — concept of trade-offs", "marks": "3", "important": true, "type": "concept" },
+            { "text": "HDI — indicators: per capita income, health, education (UNDP)", "marks": "3", "important": true, "type": "index" },
+            { "text": "Public Distribution System, literacy rate, infant mortality rate", "marks": "2", "important": true, "type": "data" },
+            { "text": "Sustainable Development — present needs without compromising future", "marks": "2", "important": true, "type": "concept" }
+          ],
+          "notes": {
+            "content": [
+              { "type": "intro", "text": "Development = improvement in quality of life, not just income growth." },
+              { "type": "keypoint", "text": "HDI (Human Development Index) published by UNDP: India ranked 132 (2021 report)." },
+              { "type": "formula", "text": "Per Capita Income = National Income / Population" },
+              { "type": "keypoint", "text": "BMI (Body Mass Index) and net attendance ratio used as alternative development indicators." }
+            ]
+          },
+          "quiz": [
+            { "q": "HDI is published by:", "options": ["World Bank", "IMF", "UNDP", "WHO"], "answer": 2 },
+            { "q": "Per capita income = :", "options": ["Total × Population", "Total / Population", "Population / Total", "None"], "answer": 1 },
+            { "q": "Infant Mortality Rate measures:", "options": ["Deaths above 60", "Deaths under 1 year per 1000 births", "Maternal deaths", "Deaths under 5"], "answer": 1 }
+          ],
+          "teachers": [{ "name": "Economics Expert", "channel": "Study Smart", "avatar": "S", "color": "#D4A017" }]
+        }
+      ]
+    },
+    {
+      "id": "english",
+      "name": "English",
+      "nameHi": "अंग्रेज़ी",
+      "icon": "📚",
+      "color": "#5A8FAA",
+      "gradient": "linear-gradient(135deg,#5A8FAA,#3A6F8A)",
+      "glow": "rgba(90,143,170,0.10)",
+      "bg": "rgba(90,143,170,0.08)",
+      "border": "rgba(90,143,170,0.22)",
+      "description": "First Flight, Footprints, Grammar & Writing",
+      "chapters": [
+        {
+          "id": "a-letter-to-god",
+          "title": "A Letter to God",
+          "titleHi": "ईश्वर को पत्र",
+          "duration": "40 min",
+          "lessons": [
+            { "id": "l1", "title": "Reading, Summary & Analysis", "videoId": "K93_E9bT8Cs", "duration": "15:00" }
+          ],
+          "ncertTopics": [
+            { "text": "Theme: Lencho's unshakeable faith in God; irony of accusing helpers", "marks": "3", "important": true, "type": "theme" },
+            { "text": "Character sketch of Lencho — optimistic, faithful, ungrateful", "marks": "3", "important": true, "type": "character" },
+            { "text": "Literary devices: irony, personification (rain as coins), simile", "marks": "3", "important": true, "type": "literary" },
+            { "text": "One-word answers and short questions from this chapter", "marks": "2", "important": true, "type": "mcq" }
+          ],
+          "notes": {
+            "content": [
+              { "type": "intro", "text": "Written by G.L. Fuentes (Mexican). Lencho, a farmer, writes to God after hailstorm destroys his crops." },
+              { "type": "keypoint", "text": "Lencho called the post office employees 'a bunch of crooks' — ultimate irony." },
+              { "type": "keypoint", "text": "Postmaster collected 70 pesos (not 100) from employees, sent it to preserve Lencho's faith in God." }
+            ]
+          },
+          "quiz": [
+            { "q": "Author of 'A Letter to God':", "options": ["Tagore", "G.L. Fuentes", "Chekov", "Pearl Buck"], "answer": 1 },
+            { "q": "How much did Lencho ask for?", "options": ["70 pesos", "100 pesos", "50 pesos", "200 pesos"], "answer": 1 },
+            { "q": "What destroyed Lencho's crops?", "options": ["Flood", "Drought", "Hailstorm", "Fire"], "answer": 2 }
+          ],
+          "teachers": [{ "name": "English Expert", "channel": "StudyRankers", "avatar": "S", "color": "#5A8FAA" }]
+        },
+        {
+          "id": "nelson-mandela",
+          "title": "Nelson Mandela: Long Walk to Freedom",
+          "titleHi": "नेल्सन मंडेला",
+          "duration": "45 min",
+          "lessons": [
+            { "id": "l1", "title": "Reading and Analysis", "videoId": "SIaFtAKnqBU", "duration": "18:00" }
+          ],
+          "ncertTopics": [
+            { "text": "Theme: Freedom, Courage, Human Dignity vs Oppression", "marks": "3", "important": true, "type": "theme" },
+            { "text": "Mandela's 'twin obligations': to family and to people of South Africa", "marks": "2", "important": true, "type": "concept" },
+            { "text": "Apartheid system and its effects; inauguration May 10, 1994", "marks": "3", "important": true, "type": "event" },
+            { "text": "Value-based questions on courage, sacrifice, forgiveness", "marks": "4", "important": true, "type": "value" }
+          ],
+          "notes": {
+            "content": [
+              { "type": "intro", "text": "Excerpt from Mandela's autobiography. Describes inauguration as President of South Africa on 10 May 1994." },
+              { "type": "keypoint", "text": "Mandela spent 27 years in Robben Island prison." },
+              { "type": "keypoint", "text": "Three Deputy Presidents: Thabo Mbeki (ANC), F.W. de Klerk (NP), Walter Sisulu." }
+            ]
+          },
+          "quiz": [
+            { "q": "Mandela spent how many years in prison?", "options": ["20", "25", "27", "30"], "answer": 2 },
+            { "q": "Date of inauguration:", "options": ["10 April 1994", "10 May 1994", "10 June 1994", "10 May 1995"], "answer": 1 },
+            { "q": "Apartheid means:", "options": ["A religion", "Racial segregation", "A political party", "Freedom"], "answer": 1 }
+          ],
+          "teachers": [{ "name": "Leverage Edu", "channel": "Leverage Edu", "avatar": "L", "color": "#4A7A3A" }]
+        },
+        {
+          "id": "grammar-writing",
+          "title": "Grammar: Tenses, Voice & Writing",
+          "titleHi": "व्याकरण और लेखन",
+          "duration": "55 min",
+          "lessons": [
+            { "id": "l1", "title": "Active/Passive Voice & Letter Writing", "videoId": "CyDC0E1wXAQ", "duration": "22:00" }
+          ],
+          "ncertTopics": [
+            { "text": "Active to Passive voice — all 12 tenses with examples", "marks": "3", "important": true, "type": "grammar" },
+            { "text": "Formal letter format: sender, date, receiver, subject, salutation, body, closing", "marks": "5", "important": true, "type": "writing" },
+            { "text": "Gap filling, editing, omission error exercises", "marks": "4", "important": true, "type": "exercise" },
+            { "text": "Article writing and Notice writing format", "marks": "5", "important": true, "type": "writing" }
+          ],
+          "notes": {
+            "content": [
+              { "type": "intro", "text": "Grammar and Writing Skills carry 25+ marks in CBSE Class 10 English board exam." },
+              { "type": "heading", "text": "Passive Voice Formula" },
+              { "type": "formula", "text": "Object + be-form + past participle + by + Subject" },
+              { "type": "keypoint", "text": "Formal letter: ends 'Yours faithfully' | Informal: 'Yours lovingly'" },
+              { "type": "example", "question": "Change to passive: 'She sings a song.'", "answer": "A song is sung by her." }
+            ]
+          },
+          "quiz": [
+            { "q": "Passive of 'They built a house':", "options": ["A house was being built", "A house was built by them", "A house is built", "A house has been built"], "answer": 1 },
+            { "q": "Formal letter ends with:", "options": ["Yours lovingly", "Yours affectionately", "Yours faithfully", "See you"], "answer": 2 },
+            { "q": "'She has been reading for 2 hours' is:", "options": ["Simple Present", "Past Perfect", "Present Perfect Continuous", "Past Continuous"], "answer": 2 }
+          ],
+          "teachers": [{ "name": "English Hub", "channel": "English Hub", "avatar": "E", "color": "#5A8FAA" }]
+        },
+        {
+          "id": "his-first-flight",
+          "title": "His First Flight",
+          "titleHi": "पहली उड़ान",
+          "duration": "35 min",
+          "lessons": [
+            { "id": "l1", "title": "Summary and Questions", "videoId": "fJbRqkY8-HQ", "duration": "15:00" }
+          ],
+          "ncertTopics": [
+            { "text": "Theme: Conquering fear; importance of courage and trying", "marks": "3", "important": true, "type": "theme" },
+            { "text": "Character of the young seagull — fear, hunger, eventual triumph", "marks": "3", "important": true, "type": "character" },
+            { "text": "Role of the mother in encouraging the young seagull", "marks": "2", "important": true, "type": "concept" }
+          ],
+          "notes": {
+            "content": [
+              { "type": "intro", "text": "By Liam O'Flaherty. A young seagull is afraid to fly. Family's encouragement and hunger overcome fear." },
+              { "type": "keypoint", "text": "The seagull was afraid of the vast sea below. His siblings flew — he didn't dare." },
+              { "type": "keypoint", "text": "Mother used hunger as a tool — held fish just out of reach, forcing him to dive and fly." }
+            ]
+          },
+          "quiz": [
+            { "q": "Author of 'His First Flight':", "options": ["James Herriot", "Liam O'Flaherty", "G.L. Fuentes", "Pearl Buck"], "answer": 1 },
+            { "q": "What made the seagull finally fly?", "options": ["Wind", "Fear of family", "Hunger", "Peer pressure"], "answer": 2 },
+            { "q": "Theme of the story:", "options": ["Loyalty", "Overcoming fear", "Family bonding", "Adventure"], "answer": 1 }
+          ],
+          "teachers": [{ "name": "StudyRankers", "channel": "StudyRankers", "avatar": "S", "color": "#5A8FAA" }]
+        }
+      ]
+    }
+  ]
+}

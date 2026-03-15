@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chapter — Vidya Mandir</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.recommend-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rec-card{background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--r);padding:10px 12px;cursor:pointer;transition:all .15s;text-decoration:none;color:inherit;display:block}
+.rec-card:hover{border-color:var(--bdr2);background:rgba(var(--br),.07)}
+.rec-card .rc-title{font-size:.8rem;font-weight:700;color:var(--t1);margin-bottom:3px;line-height:1.3}
+.rec-card .rc-sub{font-size:.7rem;color:var(--t3)}
+@media(max-width:480px){.recommend-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="nb"></div>
+<div class="page-layout">
+  <div id="sb"></div>
+  <main class="main-area" id="mainArea">
+    <div style="display:flex;align-items:center;justify-content:center;height:200px"><div class="spinner"></div></div>
+  </main>
+</div>
+<div class="page-watermark"></div>
+<script src="js/app.js"></script>
+<script src="js/security.js"></script>
+<script src="js/theme_todo.js"></script>
+<script>
+/* ─── Quiz Engine ─── */
+const Quiz = {
+  qs:[],cur:0,sel:null,answered:false,score:0,sid:null,cid:null,
+  start(qs,sid,cid){Object.assign(this,{qs,cur:0,sel:null,answered:false,score:0,sid,cid});this.render()},
+  render(){
+    const q=this.qs[this.cur],pct=(this.cur/this.qs.length)*100;
+    const L=['A','B','C','D'];
+    document.getElementById('quizBody').innerHTML=`
+      <div class="qpbar"><div class="qpfill" style="width:${pct}%"></div></div>
+      <span class="q-label">Question ${this.cur+1} of ${this.qs.length}${this.qs[this.cur].difficulty?' · '+this.qs[this.cur].difficulty:''}</span>
+      <div class="q-text">${VidyaSec.sanitize(q.q)}</div>
+      <div class="q-opts">${q.options.map((o,i)=>`
+        <button class="q-opt" onclick="Quiz.pick(${i})">
+          <div class="q-lbl">${L[i]}</div>${VidyaSec.sanitize(o)}
+        </button>`).join('')}</div>
+      <div class="q-fb" id="qfb"></div>
+      <div class="q-acts">
+        <button class="btn btn-b" id="qSub" onclick="Quiz.submit()">Submit Answer</button>
+        <button class="btn btn-gh" id="qNext" onclick="Quiz.next()" style="display:none">${this.cur<this.qs.length-1?'Next →':'See Results'}</button>
+      </div>`;
+  },
+  pick(i){if(this.answered)return;this.sel=i;document.querySelectorAll('.q-opt').forEach((el,j)=>el.classList.toggle('sel',j===i))},
+  submit(){
+    if(this.sel===null||this.answered)return;
+    this.answered=true;
+    const q=this.qs[this.cur];
+    document.querySelectorAll('.q-opt').forEach((el,i)=>{if(i===q.answer)el.classList.add('ok');else if(i===this.sel)el.classList.add('ng')});
+    const fb=document.getElementById('qfb');
+    if(this.sel===q.answer){this.score++;fb.className='q-fb ok show';fb.textContent='✅ Correct!';}
+    else{fb.className='q-fb ng show';fb.innerHTML=`❌ Incorrect. Correct answer: <strong>${VidyaSec.sanitize(q.options[q.answer])}</strong>`;}
+    document.getElementById('qSub').style.display='none';
+    document.getElementById('qNext').style.display='inline-flex';
+    document.querySelector('.qpfill').style.width=`${((this.cur+1)/this.qs.length)*100}%`;
+  },
+  next(){if(this.cur>=this.qs.length-1){this.result();return;}this.cur++;this.sel=null;this.answered=false;this.render()},
+  result(){
+    const pct=Math.round(this.score/this.qs.length*100);
+    const[e,m]=pct>=80?['🏆','Board Ready!']:pct>=60?['👍','Good work!']:pct>=40?['📚','Keep practising!']:['💪','Revise and retry!'];
+    document.getElementById('quizBody').innerHTML=`<div class="quiz-result">
+      <span class="qr-em">${e}</span>
+      <div style="font-family:var(--fd);font-size:1.1rem;color:var(--bl);margin-bottom:8px">${m}</div>
+      <div class="qr-score">${this.score}/${this.qs.length}</div>
+      <div class="qr-sub">${pct}% accuracy</div>
+      <div style="display:flex;gap:9px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-gh" onclick="Quiz.start(Quiz.qs,Quiz.sid,Quiz.cid)">↺ Retry</button>
+        <button class="btn btn-tl" onclick="ChPage.markDone()">✅ Mark Complete</button>
+      </div>
+    </div>`;
+    App.saveScore(this.sid,this.cid,this.score,this.qs.length);
+  }
+};
+
+/* ─── Chapter Page ─── */
+const ChPage={
+  sid:null,cid:null,subj:null,ch:null,li:0,
+  async init(){
+    this.sid=App.getParam('subject');this.cid=App.getParam('chapter');
+    if(!this.sid||!this.cid){location.href='dashboard.html';return;}
+    await App.loadData();
+    this.subj=App.getSubject(this.sid);this.ch=App.getChapter(this.sid,this.cid);
+    if(!this.subj||!this.ch){location.href='dashboard.html';return;}
+    document.title=`${this.ch.title} — Vidya Mandir`;
+    App.initPage(this.sid);
+    const liParam=App.getParam('lesson');
+    const liIdx=this.ch.lessons.findIndex(l=>l.id===liParam);
+    if(liIdx>=0)this.li=liIdx;
+    this.render();
+    App.setLast(this.sid,this.cid,this.ch.lessons[this.li]?.title||this.ch.title);
+    App.markWatched(this.sid,this.cid,this.ch.lessons[this.li]?.id);
+  },
+
+  render(){
+    const{ch,subj,sid,cid}=this;
+    const lesson=ch.lessons[this.li]||ch.lessons[0];
+    const p=App.getProgress();
+    const isDone=(p[sid]?.done||[]).includes(cid);
+    const bm=App.isBookmarked(sid,cid);
+    const admData=App._parseLS('vm_admin_data',{pdfs:[],ncertTopics:[],teachers:[]});
+    const pdfs=(admData.pdfs||[]).filter(pdf=>pdf.chapter===cid||pdf.subject===sid);
+    const admTopics=(admData.ncertTopics||[]).filter(t=>t.chapter===cid||t.subject===sid);
+    const allTopics=[...(ch.ncertTopics||[]),...admTopics];
+    const adminNote=ch._adminNote;
+
+    // Teacher profiles: from chapter data + admin-added
+    const admTeachers=(admData.teachers||[]).filter(t=>!t.subject||t.subject===sid);
+    const allTeachers=[...(ch.teachers||[]),...admTeachers];
+
+    // Recommended: other chapters in subject (not current)
+    const recommended=subj.chapters.filter(c=>c.id!==cid).slice(0,4);
+
+    document.getElementById('mainArea').innerHTML=`
+    <div class="page-head au">
+      <div class="breadcrumb">
+        <a href="dashboard.html">Dashboard</a><span class="sep">›</span>
+        <a href="subject.html?id=${sid}">${VidyaSec.sanitize(subj.name)}</a><span class="sep">›</span>
+        <span>${VidyaSec.sanitize(ch.title)}</span>
+      </div>
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <div>
+          <h1>${VidyaSec.sanitize(ch.title)}</h1>
+          <div class="lead" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:5px;font-size:.77rem">
+            <span>▶ ${ch.lessons.length} lessons</span>
+            <span>⏱ ${ch.duration}</span>
+            <span>❓ ${ch.quiz.length} Qs</span>
+            <span>⭐ ${allTopics.length} topics</span>
+            ${pdfs.length?`<span style="color:var(--tll)">📁 ${pdfs.length} PDFs</span>`:''}
+            ${isDone?`<span style="color:var(--tll)">✅ Complete</span>`:''}
+          </div>
+        </div>
+        ${isDone?`<span class="chip chip-tl" style="font-size:.8rem;padding:5px 12px">✅ Done</span>`:''}
+      </div>
+    </div>
+
+    <div class="ch-grid">
+      <!-- MAIN -->
+      <div>
+
+        <!-- Video player -->
+        <div class="vid-wrap au">
+          <div class="card-top-rule"></div>
+          <div class="vid-embed">
+            <iframe id="vFrame" src="https://www.youtube-nocookie.com/embed/${lesson.videoId}?rel=0&modestbranding=1"
+              title="${VidyaSec.sanitize(lesson.title)}"
+              allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"
+              allowfullscreen loading="lazy"></iframe>
+          </div>
+          <div class="vid-meta">
+            <h3 id="vTitle">${VidyaSec.sanitize(lesson.title)}</h3>
+            <div style="display:flex;gap:10px;font-size:.73rem;color:var(--t3);align-items:center;flex-wrap:wrap">
+              <span>⏱ <span id="vDur">${lesson.duration}</span></span>
+              <span>${subj.icon} ${VidyaSec.sanitize(subj.name)}</span>
+              <button class="vid-bookmark${bm?' saved':''}" id="bmBtn" onclick="ChPage.toggleBookmark()" title="${bm?'Remove bookmark':'Bookmark chapter'}" style="margin-left:auto">${bm?'🔖':'🔗'}</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lesson list -->
+        <div class="lesson-card au-1">
+          <div class="card-top-rule"></div>
+          <div class="sec-head"><h3>📋 Lessons</h3><span style="font-size:.73rem;color:var(--t3)">${ch.lessons.length} total</span></div>
+          ${ch.lessons.map((l,i)=>`<div class="lesson-row${i===this.li?' active':''}" onclick="ChPage.switchLesson(${i})">
+            <div class="lesson-n">${i===this.li?'▶':i+1}</div>
+            <div style="flex:1"><div class="lesson-title">${VidyaSec.sanitize(l.title)}</div></div>
+            <div class="lesson-dur">${l.duration}</div>
+          </div>`).join('')}
+        </div>
+
+        <!-- Admin teacher note -->
+        ${adminNote?`
+        <div class="gcard au-2" style="margin-bottom:14px">
+          <div class="card-top-rule"></div>
+          <div class="card-pad">
+            <div style="font-family:var(--fd);font-size:.88rem;color:var(--bl);font-weight:700;margin-bottom:6px">📌 Teacher's Note</div>
+            <p style="font-size:.84rem;color:var(--t2);line-height:1.7;white-space:pre-line">${VidyaSec.sanitize(adminNote)}</p>
+          </div>
+        </div>`:''}
+
+        <!-- NCERT Important Topics -->
+        ${allTopics.length?`
+        <div class="topics-card au-2">
+          <div class="card-top-rule"></div>
+          <div class="sec-head"><h3>⭐ NCERT Important Topics</h3><span class="chip chip-nc">Board Focus</span></div>
+          ${allTopics.map((t,i)=>`<div class="topic-row">
+            <div class="topic-n">${i+1}</div>
+            <div class="topic-text">${VidyaSec.sanitize(t.text)}${t.important?' <span style="color:var(--b)">★</span>':''}${t.type?` <span class="chip chip-tl" style="font-size:.62rem;padding:1px 6px">${VidyaSec.sanitize(t.type)}</span>`:''}</div>
+            ${t.marks?`<div class="topic-marks">${VidyaSec.sanitize(t.marks)}M</div>`:''}
+          </div>`).join('')}
+        </div>`:''}
+
+        <!-- PDF Resources -->
+        ${pdfs.length?`
+        <div class="pdf-card au-3">
+          <div class="card-top-rule"></div>
+          <div class="sec-head"><h3>📁 PDF Resources</h3><span class="chip chip-tl">${pdfs.length} file${pdfs.length!==1?'s':''}</span></div>
+          <div class="card-pad">
+            ${pdfs.map(pdf=>`<div class="pdf-row" onclick="ChPage.viewPDF('${pdf.url}')">
+              <span style="font-size:20px">📄</span>
+              <span style="flex:1;font-size:.84rem;font-weight:600">${VidyaSec.sanitize(pdf.name)}</span>
+              <span class="chip chip-${pdf.type==='Notes'?'b':pdf.type==='Questions'?'a':'tl'}">${VidyaSec.sanitize(pdf.type||'Notes')}</span>
+              <a href="${pdf.url}" download="${VidyaSec.sanitize(pdf.name)}" class="btn btn-gh btn-sm" onclick="event.stopPropagation()" rel="noopener">⬇</a>
+            </div>`).join('')}
+            <div id="pdfViewerWrap" style="display:none;margin-top:10px;border-radius:10px;overflow:hidden">
+              <iframe id="pdfFrame" src="" style="width:100%;height:480px;border:none;background:#fff"></iframe>
+            </div>
+          </div>
+        </div>`:''}
+
+        <!-- Notes -->
+        <div class="notes-card au-3">
+          <div class="card-top-rule"></div>
+          <div class="sec-head">
+            <h3>📝 Chapter Notes</h3>
+            <div style="display:flex;gap:6px">
+              <span class="chip chip-b">NCERT</span>
+              <button class="btn btn-gh btn-sm" onclick="ChPage.printNotes()">🖨 Print</button>
+            </div>
+          </div>
+          <div class="notes-body" id="notesBody">${this.renderNotes(ch.notes)}</div>
+        </div>
+
+        <!-- Quiz -->
+        <div class="quiz-card au-4">
+          <div class="card-top-rule"></div>
+          <div class="sec-head"><h3>🧠 Chapter Quiz</h3><span class="chip chip-a">${this.getAllQuiz().length} Questions</span></div>
+          <div id="quizBody" class="quiz-body">
+            <div style="text-align:center;padding:14px">
+              <p style="color:var(--t2);margin-bottom:14px;font-size:.88rem">Test your knowledge of <strong>${VidyaSec.sanitize(ch.title)}</strong></p>
+              <button class="btn btn-b btn-lg" onclick="Quiz.start(ChPage.getAllQuiz(),'${sid}','${cid}')">🚀 Start Quiz</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recommended chapters -->
+        ${recommended.length?`
+        <div class="au-4" style="margin-top:4px">
+          <div style="font-family:var(--fd);font-size:.95rem;color:var(--bl);margin-bottom:10px">📚 More in ${VidyaSec.sanitize(subj.name)}</div>
+          <div class="recommend-grid">
+            ${recommended.map(r=>{
+              const rd=(p[sid]?.done||[]).includes(r.id);
+              return `<a href="chapter.html?subject=${sid}&chapter=${r.id}" class="rec-card">
+                <div class="rc-title">${VidyaSec.sanitize(r.title)}</div>
+                <div class="rc-sub">⏱ ${r.duration} &nbsp;·&nbsp; ❓ ${r.quiz.length} Qs${rd?' &nbsp;·&nbsp; ✅':''}</div>
+              </a>`;
+            }).join('')}
+          </div>
+        </div>`:''}
+
+        <!-- Action buttons -->
+        <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:18px">
+          <button class="btn btn-b" onclick="ChPage.markDone()">✅ Mark Complete</button>
+          <a href="subject.html?id=${sid}" class="btn btn-gh">← Back to ${VidyaSec.sanitize(subj.name)}</a>
+          <button class="btn btn-tl" onclick="ChPage.addTodo()">📋 Add to Tasks</button>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div>
+        <!-- Teachers -->
+        ${allTeachers.length?`
+        <div class="side-card">
+          <div class="card-top-rule"></div>
+          <div class="sec-head"><h3>👨‍🏫 Educators</h3></div>
+          <div style="padding:10px;display:flex;flex-direction:column;gap:7px">
+            ${allTeachers.map(t=>`<div class="teacher-row">
+              <div class="teacher-av" style="background:${t.color||'var(--b)'};color:#fff">${VidyaSec.sanitize(t.avatar||t.name?.[0]||'T')}</div>
+              <div><div style="font-size:.83rem;font-weight:700">${VidyaSec.sanitize(t.name)}</div><div style="font-size:.7rem;color:var(--t3)">📺 ${VidyaSec.sanitize(t.channel)}</div></div>
+            </div>`).join('')}
+          </div>
+        </div>`:''}
+
+        <!-- Chapter navigation -->
+        <div class="side-card">
+          <div class="card-top-rule"></div>
+          <div class="sec-head"><h3>📑 ${VidyaSec.sanitize(subj.name)}</h3></div>
+          <div style="padding:7px">
+            ${subj.chapters.map((c,i)=>{
+              const d2=(p[sid]?.done||[]).includes(c.id);
+              return `<a href="chapter.html?subject=${sid}&chapter=${c.id}" class="ch-nav-link${c.id===cid?' active':''}${d2?' done-ch':''}">
+                <div class="ch-nav-n">${d2?'✓':i+1}</div>
+                <span>${VidyaSec.sanitize(c.title)}</span>
+              </a>`;
+            }).join('')}
+          </div>
+        </div>
+
+        <!-- Quick task widget -->
+        <div class="side-card">
+          <div class="card-top-rule"></div>
+          <div class="quick-widget">
+            <div class="qw-title">📋 Quick Task</div>
+            <input class="todo-inp" id="qTask" placeholder="Revision note…" style="margin-bottom:7px;width:100%" onkeydown="if(event.key==='Enter')ChPage.addQuick()">
+            <select class="fc" id="qPri" style="margin-bottom:8px;font-size:.8rem">
+              <option value="normal">Normal</option>
+              <option value="high">🔴 High Priority</option>
+            </select>
+            <button class="btn btn-b btn-sm" style="width:100%;justify-content:center" onclick="ChPage.addQuick()">+ Add Task</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  },
+
+  getAllQuiz(){
+    const admData=App._parseLS('vm_admin_data',{quiz:[]});
+    const admQuiz=(admData.quiz||[]).filter(q=>q.chapter===this.cid||q.subject===this.sid);
+    return[...(this.ch.quiz||[]),...admQuiz];
+  },
+
+  /* If admin pasted text-format notes, use those; else fall back to JSON notes */
+  renderNotes(n){
+    // Admin text-format notes take priority
+    if(this.ch._adminNotes&&this.ch._adminNotes.length)
+      return this.ch._adminNotes.map(b=>this._nb(b)).join('');
+    if(!n?.content)return'<p style="color:var(--t3)">No notes available.</p>';
+    return n.content.map(b=>this._nb(b)).join('');
+  },
+  _nb(item){
+    switch(item.type){
+      case'intro':   return`<div class="n-intro">${VidyaSec.sanitize(item.text)}</div>`;
+      case'heading': return`<div class="n-head">${VidyaSec.sanitize(item.text)}</div>`;
+      case'text':    return`<p class="n-text">${VidyaSec.sanitize(item.text)}</p>`;
+      case'keypoint':return`<div class="n-kp">${VidyaSec.sanitize(item.text)}</div>`;
+      case'formula': return`<div class="n-formula">📐 ${VidyaSec.sanitize(item.text)}</div>`;
+      case'example': return`<div class="n-example"><div class="n-q">💡 ${VidyaSec.sanitize(item.question||'')}</div><div class="n-a">→ ${VidyaSec.sanitize(item.answer||'')}</div></div>`;
+      default:       return`<p class="n-text">${VidyaSec.sanitize(item.text||'')}</p>`;
+    }
+  },
+  toggleBookmark(){
+    const saved=App.toggleBookmark(this.sid,this.cid);
+    const btn=document.getElementById('bmBtn');
+    if(btn){btn.textContent=saved?'🔖':'🔗';btn.classList.toggle('saved',saved);}
+    App.toast(saved?'Bookmarked! 🔖':'Bookmark removed');
+  },
+
+  markDone(){App.markDone(this.sid,this.cid);App.toast('🎉 Chapter complete!');},
+
+  addTodo(){
+    TodoPanel.add(`Revise: ${this.ch.title}`,this.sid,'','normal','');
+    App.toast(`Added to tasks 📋`);
+  },
+
+  addQuick(){
+    const inp=document.getElementById('qTask');
+    const pri=document.getElementById('qPri')?.value||'normal';
+    const text=VidyaSec.clampStr(inp?.value.trim(),200);
+    if(!text)return;
+    TodoPanel.add(text,this.sid,'',pri,'');
+    inp.value='';App.toast('Task added ✅');
+  },
+
+  printNotes(){
+    const body=document.getElementById('notesBody')?.innerText||'';
+    const w=window.open('','_blank');
+    w.document.write(`<!DOCTYPE html><html><head><title>${this.ch.title} — Notes</title>
+      <style>body{font-family:Georgia,serif;max-width:680px;margin:40px auto;line-height:1.9;color:#1a0e06;padding:0 20px}h1{color:#8A5010}pre{white-space:pre-wrap;font-family:inherit}@media print{body{margin:20px}}</style>
+      </head><body><h1>📝 ${this.ch.title}</h1><h3 style="color:#666;margin-bottom:20px">${this.subj.name} · Vidya Mandir</h3><hr><pre>${body}</pre><script src="js/music.js"></script>
+</body></html>`);
+    w.document.close();setTimeout(()=>w.print(),400);
+  }
+};
+
+document.addEventListener('DOMContentLoaded',()=>ChPage.init());
+</script>
+<script src="js/music.js"></script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bookmarks — Vidya Mandir</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="nb"></div>
+<div class="page-layout">
+  <div id="sb"></div>
+  <main class="main-area" id="mainArea">
+    <div style="display:flex;align-items:center;justify-content:center;height:200px"><div class="spinner"></div></div>
+  </main>
+</div>
+<script src="js/app.js"></script>
+<script src="js/security.js"></script>
+<script src="js/theme_todo.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  App.initPage('bookmarks');
+  const data = await App.loadData();
+  const bm   = App.getBookmarks();   // ["sid::cid", …]
+  const p    = App.getProgress();
+
+  // Resolve bookmarks to full chapter objects
+  const items = [];
+  bm.forEach(key => {
+    const [sid, cid] = key.split('::');
+    const subj = App.getSubject(sid);
+    const ch   = App.getChapter(sid, cid);
+    if (subj && ch) items.push({ subj, ch, sid, cid });
+  });
+
+  document.getElementById('mainArea').innerHTML = `
+    <div class="page-head au">
+      <div class="breadcrumb"><a href="dashboard.html">Dashboard</a><span class="sep">›</span><span>Bookmarks</span></div>
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <div>
+          <h1>🔖 Bookmarks</h1>
+          <div class="lead">Your saved chapters — pick up exactly where you want</div>
+        </div>
+        ${items.length ? `<span class="chip chip-b">${items.length} saved</span>` : ''}
+      </div>
+    </div>
+
+    ${!items.length ? `
+    <div style="text-align:center;padding:64px 20px">
+      <div style="font-size:56px;margin-bottom:16px">🔖</div>
+      <div style="font-family:var(--fd);font-size:1.3rem;color:var(--bl);margin-bottom:8px">No bookmarks yet</div>
+      <div style="color:var(--t2);font-size:.9rem;margin-bottom:24px">Open any chapter and tap 🔗 to save it here</div>
+      <a href="dashboard.html" class="btn btn-b">Go to Dashboard →</a>
+    </div>` : `
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px">
+      ${items.map(({subj,ch,sid,cid}) => {
+        const done = (p[sid]?.done||[]).includes(cid);
+        const score = p[sid]?.scores?.[cid];
+        return `<div class="gcard" style="padding:0;--card-c:${subj.gradient}">
+          <div class="card-top-rule"></div>
+          <div class="card-glow-bubble" style="background:${subj.glow}"></div>
+          <div style="padding:18px">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
+              <div style="width:42px;height:42px;border-radius:12px;background:${subj.bg};border:1px solid ${subj.border};display:flex;align-items:center;justify-content:center;font-size:20px">${subj.icon}</div>
+              <button onclick="removeBookmark('${sid}','${cid}',this)" class="btn btn-gh btn-sm" style="font-size:.72rem">✕ Remove</button>
+            </div>
+            <div style="font-family:var(--fd);font-size:1rem;font-weight:700;color:var(--t1);margin-bottom:3px">${ch.title}</div>
+            <div style="font-size:.76rem;color:var(--t2);margin-bottom:10px">${subj.name}</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;font-size:.71rem;color:var(--t3)">
+              <span>▶ ${ch.lessons.length} lessons</span>
+              <span>⏱ ${ch.duration}</span>
+              ${done ? '<span style="color:var(--tll)">✅ Done</span>' : ''}
+              ${score ? `<span style="color:var(--bl)">🏆 ${score.pct}%</span>` : ''}
+            </div>
+            <a href="chapter.html?subject=${sid}&chapter=${cid}" class="btn btn-b btn-sm" style="width:100%;justify-content:center">
+              ${done ? 'Review →' : 'Continue →'}
+            </a>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`}
+  `;
+});
+
+function removeBookmark(sid, cid, btn) {
+  App.toggleBookmark(sid, cid);
+  // Remove the card with animation
+  const card = btn.closest('.gcard');
+  if (card) {
+    card.style.transition = 'opacity .3s, transform .3s';
+    card.style.opacity = '0';
+    card.style.transform = 'scale(0.9)';
+    setTimeout(() => { card.remove(); App.toast('Bookmark removed'); }, 300);
+  }
+}
+</script>
+<script src="js/music.js"></script>
+</body>
+</html>

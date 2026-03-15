@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin Panel — Vidya Mandir</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.admin-section-title {
+  font-family: var(--font-d); font-size: 1.1rem; color: var(--saffron-l);
+  margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+  padding-bottom: 10px; border-bottom: 1px solid var(--bdr);
+}
+.tbl-wrap { overflow-x: auto; }
+</style>
+</head>
+<body class="admin-page">
+<div id="nb"></div>
+
+<!-- LOGIN WALL -->
+<div class="login-wall" id="loginWall">
+  <div class="login-box">
+    <div class="login-box-bg"></div>
+
+    <!-- Decorative rings -->
+    <div style="position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;border:1px solid rgba(var(--br),.12);pointer-events:none"></div>
+    <div style="position:absolute;bottom:-60px;left:-60px;width:200px;height:200px;border-radius:50%;border:1px solid rgba(var(--br),.08);pointer-events:none"></div>
+
+    <span class="lb-icon">🪷</span>
+    <div class="lb-title">Vidya Mandir</div>
+    <div class="lb-sub">Platform management access</div>
+
+    <div class="fg" style="text-align:left;margin-bottom:8px">
+      <label>Access Key</label>
+      <div style="position:relative">
+        <input type="password" class="fc" id="adminPass"
+          placeholder="••••••••"
+          autocomplete="current-password"
+          onkeydown="if(event.key==='Enter')Admin.tryLogin()"
+          style="padding-right:42px;letter-spacing:.2em;font-size:1.1rem">
+        <button onclick="togglePwdVis()" id="pwdToggle" style="position:absolute;right:11px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--t3);font-size:16px;line-height:1;padding:0">👁</button>
+      </div>
+    </div>
+
+    <div class="lb-err" id="loginErr"></div>
+
+    <button class="btn btn-b" id="loginBtn" style="width:100%;justify-content:center;margin-top:4px" onclick="Admin.tryLogin()">
+      Sign In →
+    </button>
+
+    <div id="lockTimer" style="display:none;margin-top:12px;text-align:center;font-size:.78rem;color:var(--t3)"></div>
+  </div>
+</div>
+
+<!-- ADMIN BODY -->
+<div class="page-layout" id="adminBody" style="display:none">
+  <div id="sb"></div>
+  <main class="main-area">
+
+    <div class="page-head au" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px">
+      <div>
+        <h1>⚙ Control Panel</h1>
+        <div class="subtitle">Full control over content, chapters, PDFs, topics, quizzes and student data</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-gh btn-sm" onclick="Admin.exportData()">⬇ Export Backup</button>
+        <label class="btn btn-gh btn-sm" style="cursor:pointer">
+          ⬆ Import <input type="file" accept=".json" style="display:none" onchange="Admin.importData(event)">
+        </label>
+        <button class="btn btn-gh btn-sm" onclick="Admin.logout()">↩ Logout</button>
+      </div>
+    </div>
+
+    <div class="stats-strip au-1" id="admin-stats"></div>
+
+    <div class="admin-grid">
+      <!-- Admin Nav -->
+      <div class="admin-nav">
+        <div style="font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--t4);padding:6px 10px 4px">Overview</div>
+        <div class="al-link on" id="al-overview" onclick="Admin.switchSection('overview')">📊 Dashboard</div>
+
+        <div style="font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--t4);padding:10px 10px 4px;margin-top:4px">Content</div>
+        <div class="al-link" id="al-builtin" onclick="Admin.switchSection('builtin')">✏️ Edit Built-in Chapters</div>
+        <div class="al-link" id="al-subjects" onclick="Admin.switchSection('subjects')">📚 Custom Subjects</div>
+        <div class="al-link" id="al-chapters" onclick="Admin.switchSection('chapters')">📄 Custom Chapters</div>
+        <div class="al-link" id="al-pdfs" onclick="Admin.switchSection('pdfs')">📁 PDF Library</div>
+        <div class="al-link" id="al-ncert" onclick="Admin.switchSection('ncert')">⭐ NCERT Topics</div>
+        <div class="al-link" id="al-highlights" onclick="Admin.switchSection('highlights')">🖊️ NCERT Highlights</div>
+        <div class="al-link" id="al-quiz" onclick="Admin.switchSection('quiz')">🧠 Quiz Questions</div>
+        <div class="al-link" id="al-announce" onclick="Admin.switchSection('announce')">📢 Announcements</div>
+        <div class="al-link" id="al-teachers" onclick="Admin.switchSection('teachers')">👨‍🏫 Teachers</div>
+
+        <div style="font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--t4);padding:10px 10px 4px;margin-top:4px">Students</div>
+        <div class="al-link" id="al-progress" onclick="Admin.switchSection('progress')">📈 Progress</div>
+        <div class="al-link" id="al-todos" onclick="Admin.switchSection('todos')">✅ All Tasks</div>
+
+        <div style="font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--t4);padding:10px 10px 4px;margin-top:4px">System</div>
+        <div class="al-link" id="al-settings" onclick="Admin.switchSection('settings')">⚙ Settings</div>
+      </div>
+
+      <!-- Panels -->
+      <div>
+
+        <!-- ── OVERVIEW ── -->
+        <div class="a-panel on" id="ap-overview">
+          <div class="admin-section-title">📊 Platform Overview</div>
+          <div class="card" style="margin-bottom:16px">
+            <div class="card-top-rule"></div>
+            <div class="card-pad">
+              <div style="font-weight:700;color:var(--t1);margin-bottom:10px;font-size:.88rem">🚀 Quick Actions</div>
+              <div style="display:flex;gap:9px;flex-wrap:wrap">
+                <button class="btn btn-b btn-sm" onclick="Admin.switchSection('builtin');Admin._setActive('builtin')">✏️ Edit Built-in Chapters</button>
+                <button class="btn btn-ac btn-sm" onclick="Admin.switchSection('pdfs');Admin._setActive('pdfs')">📁 Upload PDF</button>
+                <button class="btn btn-tl btn-sm" onclick="Admin.switchSection('ncert');Admin._setActive('ncert')">⭐ Add NCERT Topic</button>
+                <button class="btn btn-gh btn-sm" onclick="Admin.switchSection('announce');Admin._setActive('announce')">📢 Post Announcement</button>
+                <button class="btn btn-dn btn-sm" onclick="Admin.clearAll()">🗑 Clear All Progress</button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-top-rule"></div>
+            <div class="card-pad">
+              <div style="font-weight:700;color:var(--t1);margin-bottom:10px;font-size:.88rem">🪷 About This Platform</div>
+              <p style="font-size:.84rem;color:var(--t2);line-height:1.9">
+                <strong style="color:var(--saffron-l)">Vidya Mandir</strong> is a complete Class 10 CBSE/NCERT learning platform.<br>
+                Covers Mathematics, Science, Social Science and English — all four core subjects.<br>
+                Features include video lessons, chapter notes, NCERT important topics, PDF resources, interactive quizzes, and a study planner.<br>
+                Use this control panel to manage all content and monitor student activity.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── EDIT BUILT-IN CHAPTERS ── -->
+        <div class="a-panel" id="ap-builtin">
+          <div class="admin-section-title">✏️ Edit Built-in Chapters</div>
+          <div class="gcard" style="margin-bottom:16px">
+            <div class="card-top-rule"></div>
+            <div class="card-pad">
+              <div class="fg">
+                <label>Select Chapter to Edit</label>
+                <select class="fc" id="builtin-select" onchange="Admin._refreshBuiltinEditor()">
+                  <option value="">— Select a chapter to edit —</option>
+                </select>
+              </div>
+              <div style="font-size:.78rem;color:var(--t3);margin-top:-4px">Add/edit lessons, paste notes, paste quiz questions — all from this panel</div>
+            </div>
+          </div>
+          <div id="builtin-editor" style="background:var(--gl);border:1px solid var(--bdr);border-radius:var(--rl);padding:20px">
+            <div style="color:var(--t3);text-align:center;padding:24px;font-size:.86rem">↑ Select a chapter above to manage its content</div>
+          </div>
+          <div style="margin-top:12px">
+            <button class="btn btn-gh btn-sm" onclick="Admin.clearAllOverrides()">🗑 Clear All Chapter Overrides</button>
+          </div>
+        </div>
+
+        <!-- ── CUSTOM SUBJECTS ── -->
+        <div class="a-panel" id="ap-subjects">
+          <div class="admin-section-title">📚 Custom Subjects</div>
+          <div class="card" style="margin-bottom:16px">
+            <div class="card-top-rule"></div>
+            <div class="card-head"><h3>➕ Add Subject</h3></div>
+            <div class="card-pad">
+              <div class="fg2">
+                <div class="fg"><label>Subject Name *</label><input class="fc" id="ns-name" placeholder="e.g. Computer Science"></div>
+                <div class="fg"><label>Icon (emoji)</label><input class="fc" id="ns-icon" placeholder="💻" maxlength="4"></div>
+              </div>
+              <div class="fg"><label>Description</label><input class="fc" id="ns-desc" placeholder="Brief description of this subject"></div>
+              <button class="btn btn-b" onclick="Admin.addSubject()">➕ Add Subject</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-top-rule"></div>
+            <div class="card-head"><h3>All Subjects</h3></div>
+            <div class="tbl-wrap">
+              <table class="data-tbl"><thead><tr><th>Subject</th><th>Type</th><th>Action</th></tr></thead>
+              <tbody id="subj-tbody"></tbody></table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── CUSTOM CHAPTERS ── -->
+        <div class="a-panel" id="ap-chapters">
+          <div class="admin-section-title">📄 Custom Chapters</div>
+          <div class="card" style="margin-bottom:16px">
+            <div class="card-top-rule"></div>
+            <div class="card-head"><h3>➕ Add Chapter</h3></div>
+            <div class="card-pad">
+              <div class="fg2">
+                <div class="fg"><label>Chapter Title *</label><input class="fc" id="nc-title" placeholder="e.g. Heredity and Evolution"></div>
+                <div class="fg"><label>Subject *</label>
+                  <select class="fc" id="nc-subj">
+                    <option value="">Select Subject…</option>
+                    <option>Mathematics</option><option>Science</option>
+                    <option>Social Science</option><option>English</option>
+                  </select>
+                </div>
+              </div>
+              <div class="fg2">
+                <div class="fg"><label>YouTube Video ID</label><input class="fc" id="nc-vid" placeholder="Paste the 11-character video ID"></div>
+                <div class="fg"><label>Duration</label><input class="fc" id="nc-dur" placeholder="e.g. 45 min"></div>
+              </div>
+              <div class="fg"><label>Chapter Notes</label><textarea class="fc fc-ta" id="nc-notes" placeholder="Chapter notes or key points…"></textarea></div>
+              <button class="btn btn-b" onclick="Admin.addChapter()">➕ Add Chapter</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-top-rule"></div>
+            <div class="card-head"><h3>Custom Chapters</h3></div>
+            <div class="tbl-wrap">
+              <table class="data-tbl"><thead><tr><th>Title</th><th>Subject</th><th>Video</th><th>Notes</th><th>Action</th></tr></thead>
+              <tbody id="ch-tbody"></tbody></table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── PDF LIBRARY ── -->
+        <div class="a-panel" id="ap-pdfs">
+          <div class="admin-section-title">📁 PDF Library</div>
+          <div class="card" style="margin-bottom:16px">
+            <div class="card-top-rule"></div>
+            <div class="card-head"><h3>📤 Upload / Link PDF</h3></div>
+            <div class="card-pad">
+              <div class="upload-zone" onclick="document.getElementById('pdf-file').click()">
+                <input type="file" id="pdf-file" accept=".pdf,application/pdf" style="display:none">
+                <div style="font-size:32px;margin-bottom:7px">📄</div>
+                <p style="font-size:.84rem;color:var(--t2);font-weight:600;margin-bottom:2px">Click to upload a PDF file</p>
+                <span style="font-size:.74rem;color:var(--t3)">NCERT books · notes · past papers · worksheets</span>
+              </div>
+              <div style="text-align:center;font-size:.78rem;color:var(--t3);margin:-6px 0 12px">— or enter a URL below —</div>
+              <div class="fg"><label>PDF URL (if not uploading file)</label><input class="fc" id="pdf-url" placeholder="https://example.com/notes.pdf"></div>
+              <div class="fg2">
+                <div class="fg"><label>Display Name *</label><input class="fc" id="pdf-name" placeholder="e.g. Real Numbers — NCERT Notes"></div>
+                <div class="fg"><label>Subject *</label>
+                  <select class="fc" id="pdf-subj">
+                    <option value="">Select Subject…</option>
+                    <option value="mathematics">Mathematics</option>
+                    <option value="science">Science</option>
+                    <option value="social-science">Social Science</option>
+                    <option value="english">English</option>
+                  </select>
+                </div>
+              </div>
+              <div class="fg2">
+                <div class="fg">
+                  <label>Chapter <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:.69rem;color:var(--t3)">(optional — leave blank to apply to whole subject)</span></label>
+                  <input class="fc" id="pdf-ch" placeholder="e.g. Real Numbers">
+                </div>
+                <div class="fg"><label>Type</label>
+                  <select class="fc" id="pdf-type">
+                    <option>Notes</option><option>NCERT Book</option>
+                    <option>Questions</option><option>Past Paper</option>
+                    <option>Worksheet</option><option>Solution</option><option>Other</option>
+                  </select>
+                </div>
+              </div>
+              <button class="btn btn-b" onclick="Admin.addPDF()">📁 Save PDF</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-top-rule"></div>
+            <div class="card-head"><h3>All PDFs</h3></div>
+            <div class="tbl-wrap">
+              <table class="data-tbl"><thead><tr><th>Name</th><th>Subject</th><th>Chapter</th><th>Type</th><th>Actions</th></tr></thead>
+              <tbody id="pdf-tbody"></tbody></table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── NCERT TOPICS ── -->
+        <div class="a-panel" id="ap-ncert">
+          <div class="admin-section-title">⭐ NCERT Important Topics</div>
+          <div class="card" style="margin-bottom:16px">
+            <div class="card-top-rule"></div>
+            <div class="card-head"><h3>➕ Add Important Topic</h3></div>
+            <div class="card-pad">
+              <div class="fg"><label>Topic / Statement *</label>
+                <textarea class="fc fc-ta" id="nt-text" placeholder="e.g. Euclid's Division Lemma: a = bq + r where 0 ≤ r < b. Used to find HCF."></textarea>
+              </div>
+              <div class="fg2">
+                <div class="fg"><label>Subject *</label>
+                  <select class="fc" id="nt-subj">
+                    <option value="">Select Subject…</option>
+                    <option value="mathematics">Mathematics</option>
+                    <option value="science">Science</option>
+                    <option value="social-science">Social Science</option>
+                    <option value="english">English</option>
+                  </select>
+                </div>
+                <div class="fg">
+                  <label>Chapter <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:.67rem;color:var(--t3)">(optional)</span></label>
+                  <input class="fc" id="nt-ch" placeholder="e.g. Real Numbers">
+                </div>
+              </div>
+              <div class="fg3">
+                <div class="fg"><label>Marks</label><input type="number" class="fc" id="nt-marks" placeholder="e.g. 3" min="1" max="10"></div>
+                <div class="fg"><label>Topic Type</label>
+                  <select class="fc" id="nt-type">
+                    <option>concept</option><option>theorem</option><option>formula</option>
+                    <option>proof</option><option>application</option><option>definition</option>
+                    <option>diagram</option><option>table</option><option>event</option>
+                    <option>person</option><option>theme</option><option>process</option>
+                    <option>method</option><option>identity</option>
+                  </select>
+                </div>
+                <div class="fg"><label>Star Important?</label>
+                  <div style="display:flex;align-items:center;gap:8px;margin-top:10px">
+                    <input type="checkbox" id="nt-imp" style="width:17px;height:17px;accent-color:var(--saffron)">
+                    <label for="nt-imp" style="font-size:.83rem;color:var(--t2);font-weight:600;letter-spacing:0;text-transform:none">Mark ★ Very Important</label>
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-b" onclick="Admin.addNCERT()">⭐ Add Topic</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-top-rule"></div>
+            <div class="card-head"><h3 id="ncert-count-head">All NCERT Topics</h3></div>
+            <div class="tbl-wrap">
+              <table class="data-tbl"><thead><tr><th>Topic</th><th>Subject</th><th>Chapter</th><th>Marks</th><th>★</th><th>Action</th></tr></thead>
+              <tbody id="ncert-tbody"></tbody></table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── QUIZ QUESTIONS ── -->
+        <div class="a-panel" id="ap-quiz">
+          <div class="admin-section-title">🧠 Custom Quiz Questions</div>
+          <div class="card" style="margin-bottom:16px">
+            <div class="card-top-rule"></div>
+            <div class="card-head"><h3>➕ Add Question</h3></div>
+            <div class="card-pad">
+              <div class="fg"><label>Question *</label><textarea class="fc fc-ta" id="nq-q" placeholder="Enter the question text…"></textarea></div>
+              <div class="fg2">
+                <div class="fg"><label>Subject *</label>
+                  <select class="fc" id="nq-subj">
+                    <option value="mathematics">Mathematics</option><option value="science">Science</option>
+                    <option value="social-science">Social Science</option><option value="english">English</option>
+                  </select>
+                </div>
+                <div class="fg"><label>Chapter ID</label><input class="fc" id="nq-ch" placeholder="e.g. real-numbers"></div>
+              </div>
+              <div class="fg2">
+                <div class="fg"><label>Option A *</label><input class="fc" id="nq-o1" placeholder="First option"></div>
+                <div class="fg"><label>Option B *</label><input class="fc" id="nq-o2" placeholder="Second option"></div>
+              </div>
+              <div class="fg2">
+                <div class="fg"><label>Option C</label><input class="fc" id="nq-o3" placeholder="Third option (optional)"></div>
+                <div class="fg"><label>Option D</label><input class="fc" id="nq-o4" placeholder="Fourth option (optional)"></div>
+              </div>
+              <div class="fg2">
+                <div class="fg"><label>Correct Answer *</label>
+                  <select class="fc" id="nq-ans">
+                    <option value="0">A — First option</option>
+                    <option value="1">B — Second option</option>
+                    <option value="2">C — Third option</option>
+                    <option value="3">D — Fourth option</option>
+                  </select>
+                </div>
+                <div class="fg"><label>Marks</label><input type="number" class="fc" id="nq-marks" placeholder="1" min="1" max="5" value="1"></div>
+              </div>
+              <button class="btn btn-b" onclick="Admin.addQuiz()">🧠 Add Question</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-top-rule"></div>
+            <div class="card-head"><h3>Custom Questions</h3></div>
+            <div class="tbl-wrap">
+              <table class="data-tbl"><thead><tr><th>Question</th><th>Subject</th><th>Chapter</th><th>Action</th></tr></thead>
+              <tbody id="quiz-tbody"></tbody></table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── ANNOUNCEMENTS ── -->
+        <div class="a-panel" id="ap-announce">
+          <div class="admin-section-title">📢 Announcements</div>
+          <div class="card" style="margin-bottom:16px">
+            <div class="card-top-rule"></div>
+            <div class="card-head"><h3>➕ Post Announcement</h3></div>
+            <div class="card-pad">
+              <div class="fg2">
+                <div class="fg"><label>Title *</label><input class="fc" id="na-title" placeholder="e.g. Board Exam Date Announced"></div>
+                <div class="fg"><label>Type</label>
+                  <select class="fc" id="na-type">
+                    <option value="info">ℹ Information</option>
+                    <option value="exam">📝 Exam / Test</option>
+                    <option value="important">⭐ Important</option>
+                  </select>
+                </div>
+              </div>
+              <div class="fg"><label>Message *</label><textarea class="fc fc-ta" id="na-text" placeholder="Announcement details…"></textarea></div>
+              <button class="btn btn-b" onclick="Admin.addAnnouncement()">📢 Post</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-top-rule"></div>
+            <div class="card-head"><h3>Posted Announcements</h3></div>
+            <div class="tbl-wrap">
+              <table class="data-tbl"><thead><tr><th>Title</th><th>Message</th><th>Type</th><th>Action</th></tr></thead>
+              <tbody id="ann-tbody"></tbody></table>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- ── TEACHERS ── -->
+        <div class="a-panel" id="ap-teachers">
+          <div class="admin-sec-title">👨‍🏫 Teacher Profiles</div>
+          <div class="gcard" style="margin-bottom:16px">
+            <div class="card-top-rule"></div>
+            <div class="card-head"><h3>➕ Add Teacher</h3></div>
+            <div class="card-pad">
+              <div class="fg2">
+                <div class="fg"><label>Full Name *</label><input class="fc" id="nt2-name" placeholder="e.g. Pankaj Thakur"></div>
+                <div class="fg"><label>Channel / Platform *</label><input class="fc" id="nt2-channel" placeholder="e.g. Vedantu"></div>
+              </div>
+              <div class="fg2">
+                <div class="fg"><label>Subject</label>
+                  <select class="fc" id="nt2-subj">
+                    <option value="">All Subjects</option>
+                    <option value="mathematics">Mathematics</option>
+                    <option value="science">Science</option>
+                    <option value="social-science">Social Science</option>
+                    <option value="english">English</option>
+                  </select>
+                </div>
+                <div class="fg"><label>Accent Color</label><input type="color" class="fc" id="nt2-color" value="#C8822A" style="height:40px"></div>
+              </div>
+              <div class="fg2">
+                <div class="fg"><label>Avatar Letter/Emoji</label><input class="fc" id="nt2-avatar" placeholder="e.g. P or 👨‍🏫" maxlength="4"></div>
+              </div>
+              <button class="btn btn-b" onclick="Admin.addTeacher()">➕ Add Teacher</button>
+            </div>
+          </div>
+          <div class="gcard">
+            <div class="card-top-rule"></div>
+            <div class="card-head"><h3>All Teachers</h3></div>
+            <div style="overflow-x:auto">
+              <table class="data-tbl"><thead><tr><th>Name</th><th>Channel</th><th>Subject</th><th>Action</th></tr></thead>
+              <tbody id="teacher-tbody"></tbody></table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── PROGRESS ── -->
+        <div class="a-panel" id="ap-progress">
+          <div class="admin-section-title">📈 Student Progress</div>
+          <div class="card">
+            <div class="card-top-rule"></div>
+            <div class="card-head">
+              <h3>Chapter Completion</h3>
+              <button class="btn btn-dn btn-sm" onclick="Admin.clearAll()">🗑 Clear All</button>
+            </div>
+            <div class="tbl-wrap">
+              <table class="data-tbl"><thead><tr><th>Subject</th><th>Done</th><th>Progress</th><th>Quizzes</th><th>Action</th></tr></thead>
+              <tbody id="prog-tbody"></tbody></table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── TASKS ── -->
+        <div class="a-panel" id="ap-todos">
+          <div class="admin-section-title">✅ All Student Tasks</div>
+          <div class="card">
+            <div class="card-top-rule"></div>
+            <div class="card-head">
+              <h3>Task List</h3>
+              <a href="todo.html" class="btn btn-gh btn-sm">Open Planner →</a>
+            </div>
+            <div class="tbl-wrap">
+              <table class="data-tbl"><thead><tr><th>Task</th><th>Subject</th><th>Priority</th><th>Due</th><th>Marks</th><th>Status</th></tr></thead>
+              <tbody id="todos-tbody"></tbody></table>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- ── NCERT HIGHLIGHTS ── -->
+        <div class="a-panel" id="ap-highlights">
+          <div class="admin-sec-title">🖊️ NCERT Book Highlights</div>
+          <div class="gcard" style="margin-bottom:16px">
+            <div class="card-top-rule"></div>
+            <div class="card-head"><h3>➕ Add Highlight</h3></div>
+            <div class="card-pad">
+              <div class="fg"><label>Highlighted Text *</label><textarea class="fc fc-ta" id="hl-text" placeholder="Paste the exact text from NCERT book to highlight…" style="min-height:80px"></textarea></div>
+              <div class="fg2">
+                <div class="fg"><label>Subject *</label>
+                  <select class="fc" id="hl-subj">
+                    <option value="">Select…</option>
+                    <option value="mathematics">Mathematics</option>
+                    <option value="science">Science</option>
+                    <option value="social-science">Social Science</option>
+                    <option value="english">English</option>
+                  </select>
+                </div>
+                <div class="fg"><label>Chapter</label><input class="fc" id="hl-ch" placeholder="e.g. real-numbers"></div>
+              </div>
+              <div class="fg2">
+                <div class="fg"><label>Highlight Colour</label><input type="color" class="fc" id="hl-color" value="#FFD700" style="height:40px"></div>
+                <div class="fg"><label>Teacher Note (optional)</label><input class="fc" id="hl-note" placeholder="Why this is important…"></div>
+              </div>
+              <button class="btn btn-b" onclick="Admin.addHighlight()">🖊️ Add Highlight</button>
+            </div>
+          </div>
+          <div class="gcard">
+            <div class="card-top-rule"></div>
+            <div class="card-head"><h3 id="ncert-count-head">All Highlights</h3></div>
+            <div class="tbl-wrap"><table class="data-tbl"><thead><tr><th>Text</th><th>Subject</th><th>Chapter</th><th>Action</th></tr></thead><tbody id="hl-tbody"></tbody></table></div>
+          </div>
+        </div>
+
+        <!-- ── SETTINGS ── -->
+        <div class="a-panel" id="ap-settings">
+          <div class="admin-section-title">⚙ Platform Settings</div>
+          <div class="card" style="margin-bottom:16px">
+            <div class="card-top-rule"></div>
+            <div class="card-head"><h3>Site Identity</h3></div>
+            <div class="card-pad">
+              <div class="fg2">
+                <div class="fg"><label>Platform Name</label><input class="fc" id="s-name" placeholder="Vidya Mandir"></div>
+              </div>
+              <div class="fg"><label>Message of the Day <span style="text-transform:none;letter-spacing:0;font-weight:400;font-size:.69rem;color:var(--t3)">(shown on dashboard)</span></label>
+                <input class="fc" id="s-motd" placeholder="ज्ञान एक दीपक है…">
+              </div>
+              <button class="btn btn-b" onclick="Admin.saveSiteSettings()">💾 Save Settings</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-top-rule"></div>
+            <div class="card-head"><h3>Platform Statistics</h3></div>
+            <div class="card-pad">
+              <div id="settings-info" style="font-size:.84rem;color:var(--t2);line-height:2.1"></div>
+            </div>
+          </div>
+          <div class="card" style="margin-top:14px">
+            <div class="card-top-rule"></div>
+            <div class="card-head"><h3>Data Management</h3></div>
+            <div class="card-pad">
+              <p style="font-size:.83rem;color:var(--t2);margin-bottom:14px;line-height:1.7">
+                Export a full backup of all admin data, student progress, tasks and chapter overrides.
+                Import to restore a previous backup.
+              </p>
+              <div style="display:flex;gap:9px;flex-wrap:wrap">
+                <button class="btn btn-b btn-sm" onclick="Admin.exportData()">⬇ Export Backup</button>
+                <label class="btn btn-gh btn-sm" style="cursor:pointer">
+                  ⬆ Import Backup
+                  <input type="file" accept=".json" style="display:none" onchange="Admin.importData(event)">
+                </label>
+                <button class="btn btn-dn btn-sm" onclick="Admin.clearAll()">🗑 Clear Student Progress</button>
+                <button class="btn btn-dn btn-sm" onclick="Admin.clearAllOverrides()">🗑 Clear Chapter Overrides</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end panels -->
+    </div><!-- end admin-grid -->
+  </main>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/theme_todo.js"></script>
+<script src="js/security.js"></script>
+<script src="js/admin.js"></script>
+<script>
+/* Patch Admin with helper for setting active nav */
+Admin._setActive = function(id) {
+  document.querySelectorAll('.an-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('al-' + id)?.classList.add('active');
+};
+
+/* Patch refresh to update NCERT count header */
+const _origRefresh = Admin.refresh.bind(Admin);
+Admin.refresh = function() {
+  _origRefresh();
+  const d = this.getData();
+  const nh = document.getElementById('ncert-count-head');
+  if (nh) nh.textContent = `All NCERT Topics (${d.ncertTopics.length})`;
+};
+</script>
+<script>
+function togglePwdVis() {
+  const inp = document.getElementById('adminPass');
+  const btn = document.getElementById('pwdToggle');
+  if (!inp) return;
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.textContent = inp.type === 'password' ? '👁' : '🙈';
+}
+
+// Lockout countdown display
+(function tickLock() {
+  const secs = VidyaSec ? VidyaSec.isLocked() : false;
+  const el = document.getElementById('lockTimer');
+  const btn = document.getElementById('loginBtn');
+  if (el && btn) {
+    if (secs) {
+      el.style.display = 'block';
+      el.textContent = `Locked — retry in ${secs}s`;
+      btn.disabled = true;
+    } else {
+      el.style.display = 'none';
+      btn.disabled = false;
+    }
+  }
+  setTimeout(tickLock, 1000);
+})();
+</script>
+<script src="js/music.js"></script>
+</body>
+</html>

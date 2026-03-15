@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="refresh" content="0;url=index.html">
+<title>Vidya Mandir</title>
+</head>
+<body>
+<script>
+// GitHub Pages SPA redirect
+const seg = window.location.pathname.split('/').slice(1);
+const repo = seg[0]; // repo name if in subdirectory
+const path = seg.slice(1).join('/');
+const search = window.location.search;
+const hash = window.location.hash;
+window.location.replace(
+  window.location.origin + (repo ? '/' + repo : '') + '/index.html' +
+  (path ? '?p=/' + path.replace(/&/g, '~and~') + (search ? '&' + search.slice(1) : '') : search) +
+  hash
+);
+</script>
+<script src="js/music.js"></script>
+</body>
+</html>

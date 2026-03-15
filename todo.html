@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Study Planner — Vidya Mandir</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.todo-page-grid { display: grid; grid-template-columns: 1fr 275px; gap: 20px; }
+.tips-wrap { display: flex; flex-direction: column; gap: 12px; }
+.tip-card { background: var(--surf); border: 1px solid var(--bdr); border-radius: var(--r); padding: 13px 15px; position: relative; overflow: hidden; }
+.tip-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--saffron-d), transparent); }
+.tip-icon { font-size: 22px; margin-bottom: 6px; }
+.tip-title { font-size: .82rem; font-weight: 700; color: var(--saffron-l); margin-bottom: 3px; font-family: var(--font-d); }
+.tip-text { font-size: .77rem; color: var(--t2); line-height: 1.55; }
+.prog-ring { display: flex; align-items: center; gap: 14px; }
+.ring-num { font-family: var(--font-d); font-size: 2.2rem; font-weight: 700; color: var(--saffron-l); line-height: 1; }
+@media(max-width:860px) { .todo-page-grid { grid-template-columns: 1fr } }
+</style>
+</head>
+<body>
+<div id="nb"></div>
+<div class="page-layout">
+  <div id="sb"></div>
+  <main class="main-area">
+
+    <div class="page-head au">
+      <div class="breadcrumb"><a href="dashboard.html">Dashboard</a><span class="sep">›</span><span>Study Planner</span></div>
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <div>
+          <h1>📋 <span class="accent">मेरे कार्य</span> &middot; My Tasks</h1>
+          <div class="subtitle">Organise your study with priorities, due dates, marks weight and subject tags</div>
+        </div>
+        <button class="btn btn-gh btn-sm" onclick="TodoPage.clearDone()">🗑 Clear Done</button>
+      </div>
+    </div>
+
+    <div class="stats-strip au-1" id="todo-stats"></div>
+
+    <div class="todo-page-grid">
+      <!-- LEFT: Add + List -->
+      <div>
+        <!-- Add Task -->
+        <div class="card au-2" style="margin-bottom:18px">
+          <div class="card-top-rule"></div>
+          <div class="card-head"><h3>➕ Add New Task</h3></div>
+          <div class="card-pad">
+            <div class="fg">
+              <label>Task Description</label>
+              <input class="fc" id="ftText" placeholder="What do you need to study or revise?"
+                onkeydown="if(event.key==='Enter')TodoPage.addTask()">
+            </div>
+            <div class="fg2">
+              <div class="fg">
+                <label>Subject</label>
+                <select class="fc" id="ftSubj">
+                  <option value="general">📋 General</option>
+                  <option value="mathematics">📐 Mathematics</option>
+                  <option value="science">🔬 Science</option>
+                  <option value="social-science">🌍 Social Science</option>
+                  <option value="english">📚 English</option>
+                </select>
+              </div>
+              <div class="fg">
+                <label>Priority</label>
+                <select class="fc" id="ftPri">
+                  <option value="normal">Normal</option>
+                  <option value="high">🔴 High Priority</option>
+                </select>
+              </div>
+            </div>
+            <div class="fg2">
+              <div class="fg"><label>Due Date</label><input type="date" class="fc" id="ftDue"></div>
+              <div class="fg"><label>Marks Weight</label><input type="number" class="fc" id="ftMarks" placeholder="e.g. 5" min="1" max="20"></div>
+            </div>
+            <button class="btn btn-b" onclick="TodoPage.addTask()" style="width:100%;justify-content:center">+ Add Task</button>
+          </div>
+        </div>
+
+        <!-- Filters + Search -->
+        <div style="display:flex;gap:9px;margin-bottom:13px;flex-wrap:wrap;align-items:center">
+          <div class="filter-tabs">
+            <div class="ftab active" data-tf="all" onclick="TodoPage.setFilter('all')">All</div>
+            <div class="ftab" data-tf="pending" onclick="TodoPage.setFilter('pending')">Pending</div>
+            <div class="ftab" data-tf="done" onclick="TodoPage.setFilter('done')">Done</div>
+            <div class="ftab" data-tf="overdue" onclick="TodoPage.setFilter('overdue')">Overdue</div>
+            <div class="ftab" data-tf="high" onclick="TodoPage.setFilter('high')">High Priority</div>
+          </div>
+          <input class="todo-inp" style="flex:1;min-width:140px;max-width:210px;height:33px;font-size:.79rem"
+            placeholder="🔍 Search tasks…"
+            oninput="TodoPage.searchQ=this.value.toLowerCase();TodoPage.render()">
+        </div>
+
+        <div class="todo-items" id="fullTodoList"></div>
+      </div>
+
+      <!-- RIGHT: Progress + Tips -->
+      <div>
+        <!-- Progress -->
+        <div class="card au-1" style="margin-bottom:14px">
+          <div class="card-top-rule"></div>
+          <div class="card-pad">
+            <div style="font-size:.69rem;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:.09em;margin-bottom:11px">Study Progress</div>
+            <div class="prog-ring" style="margin-bottom:12px">
+              <div>
+                <div class="ring-num" id="todo-pct">0%</div>
+                <div style="font-size:.7rem;color:var(--t3)">complete</div>
+              </div>
+              <div style="flex:1">
+                <div style="font-size:.84rem;font-weight:700;margin-bottom:3px">Keep going!</div>
+                <div style="font-size:.76rem;color:var(--t2);line-height:1.5">Small consistent steps lead to big results on exam day.</div>
+              </div>
+            </div>
+            <div class="pbar pbar-lg"><div class="pfill" id="todo-pf" style="width:0%"></div></div>
+          </div>
+        </div>
+
+        <!-- Study Tips -->
+        <div class="tips-wrap au-2">
+          <div class="tip-card">
+            <div class="tip-icon">⏰</div>
+            <div class="tip-title">Pomodoro Technique</div>
+            <div class="tip-text">Study 25 min → 5 min break. After 4 rounds take a long 20-min break.</div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon">⭐</div>
+            <div class="tip-title">Tackle NCERT First</div>
+            <div class="tip-text">CBSE board papers are 80–90% directly from NCERT. Master the book before guides.</div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon">🔄</div>
+            <div class="tip-title">Spaced Repetition</div>
+            <div class="tip-text">Review topics after 1 day, 3 days, 1 week, 1 month. This fixes memory long-term.</div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon">💤</div>
+            <div class="tip-title">Sleep to Consolidate</div>
+            <div class="tip-text">Memory is formed during deep sleep. 7–8 hours is non-negotiable before exams.</div>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon">📝</div>
+            <div class="tip-title">Past Papers Win</div>
+            <div class="tip-text">Solve last 5 years' board papers. Pattern recognition beats any shortcut.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="js/app.js"></script>
+<script src="js/theme_todo.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  App.initPage('todo');
+  // Set today as minimum date
+  const today = new Date().toISOString().split('T')[0];
+  const dueFld = document.getElementById('ftDue');
+  if (dueFld) dueFld.min = today;
+  TodoPage.render();
+});
+</script>
+<div class="page-watermark"></div>
+<script src="js/music.js"></script>
+</body>
+</html>

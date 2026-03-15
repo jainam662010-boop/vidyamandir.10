@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" data-scheme="rajasthani" data-mode="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Vidya Mandir — Complete Class 10 CBSE NCERT learning platform.">
+<title>Vidya Mandir — Class 10 Learning Platform</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.lotus-field{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.lotus-p{position:absolute;font-size:var(--ps,18px);opacity:0;animation:floatUp var(--pd,8s) var(--pdelay,0s) infinite ease-in-out;filter:blur(.5px)}
+@keyframes floatUp{0%{opacity:0;transform:translateY(0) rotate(0deg) scale(.8)}15%{opacity:.3}85%{opacity:.15}100%{opacity:0;transform:translateY(-110px) rotate(180deg) scale(1.1)}}
+.orn-row{display:flex;align-items:center;gap:14px;justify-content:center;margin:8px 0 30px}
+.orn-line{flex:1;max-width:120px;height:1px;background:linear-gradient(90deg,transparent,rgba(var(--br),.5))}
+.orn-line.r{background:linear-gradient(270deg,transparent,rgba(var(--br),.5))}
+.orn-sym{color:var(--bl);font-size:1rem;opacity:.65}
+.hero-title .t2{background-size:200% auto;animation:gshift 4s ease infinite}
+@keyframes gshift{0%{background-position:0% center}50%{background-position:100% center}100%{background-position:0% center}}
+.feat-card{position:relative;overflow:hidden;padding:18px 16px 16px}
+.feat-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--b),transparent);opacity:0;transition:opacity .3s}
+.feat-card:hover::after{opacity:1}
+.feat-num{font-family:var(--fd);font-size:2rem;font-weight:700;color:rgba(var(--br),.12);position:absolute;top:8px;right:12px;line-height:1}
+.footer-line{position:absolute;bottom:22px;left:0;right:0;text-align:center;font-size:.72rem;color:var(--t4);letter-spacing:.04em}
+</style>
+</head>
+<body>
+<main class="hero-page">
+  <div class="hero-art" id="heroArt"></div>
+  <div class="hero-veil"></div>
+  <div class="lotus-field" id="lotusField"></div>
+
+  <div class="hero-content">
+    <!-- Theme switcher -->
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:28px;flex-wrap:wrap" class="au">
+      <span style="font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--t4)">Heritage Theme</span>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <div class="ht-wrap"><div class="ht-dot active" data-scheme="rajasthani" onclick="switchTheme(this,'rajasthani')"><img src="assets/bg-pattern.png" alt="Rajasthani"></div><div class="ht-lbl">Rajasthani</div></div>
+        <div class="ht-wrap"><div class="ht-dot" data-scheme="mandala" onclick="switchTheme(this,'mandala')"><img src="assets/theme-mandala.png" alt="Mandala"></div><div class="ht-lbl">Mandala</div></div>
+        <div class="ht-wrap"><div class="ht-dot" data-scheme="kalamkari" onclick="switchTheme(this,'kalamkari')"><img src="assets/theme-kalamkari.png" alt="Kalamkari"></div><div class="ht-lbl">Kalamkari</div></div>
+        <div class="ht-wrap"><div class="ht-dot" data-scheme="tanjore" onclick="switchTheme(this,'tanjore')"><img src="assets/theme-tanjore.png" alt="Tanjore"></div><div class="ht-lbl">Tanjore</div></div>
+      </div>
+    </div>
+
+    <div class="hero-stamp au-1">🪷 &nbsp; Indian Heritage · Class 10 · CBSE · NCERT</div>
+    <div class="hero-deva au-1" style="margin-top:10px">विद्या ददाति विनयम् — Knowledge gives humility</div>
+
+    <h1 class="hero-title au-2">
+      <span class="t1">Vidya</span>
+      <span class="t2">Mandir</span>
+    </h1>
+
+    <div class="orn-row au-3">
+      <div class="orn-line"></div>
+      <span class="orn-sym">❋</span>
+      <span style="font-family:var(--fd);font-size:.76rem;color:var(--t3);letter-spacing:.07em">YOUR CLASS 10 COMPANION</span>
+      <span class="orn-sym">❋</span>
+      <div class="orn-line r"></div>
+    </div>
+
+    <p class="hero-lead au-3">Video lessons · NCERT notes · Important topics with marks weight · PDF library · Chapter quizzes · Smart study planner. Four subjects. One platform.</p>
+
+    <div class="hero-btns au-4">
+      <a href="dashboard.html" class="btn btn-b btn-lg" style="gap:9px;min-width:175px">🏛️ Start Learning</a>
+      <a href="todo.html" class="btn btn-gh btn-lg" style="gap:9px">📋 Study Planner</a>
+    </div>
+
+    <div class="pill-row au-4">
+      <a href="subject.html?id=mathematics" class="subj-pill">📐 Ganit</a>
+      <a href="subject.html?id=science" class="subj-pill">🔬 Vigyan</a>
+      <a href="subject.html?id=social-science" class="subj-pill">🌍 Samaj Vigyan</a>
+      <a href="subject.html?id=english" class="subj-pill">📚 Angrezi</a>
+    </div>
+
+    <div class="feat-grid au-4">
+      <div class="feat-card"><div class="feat-num">01</div><div class="feat-ico">▶️</div><div class="feat-title">Video Lessons</div><div class="feat-desc">Curated per-chapter videos from Vedantu, BYJU'S, Khan Academy</div></div>
+      <div class="feat-card"><div class="feat-num">02</div><div class="feat-ico">⭐</div><div class="feat-title">NCERT Topics</div><div class="feat-desc">Board-focused topics with marks weightage, starred by your teacher</div></div>
+      <div class="feat-card"><div class="feat-num">03</div><div class="feat-ico">📁</div><div class="feat-title">PDF Library</div><div class="feat-desc">NCERT books, notes, past papers — upload once, access from any chapter</div></div>
+      <div class="feat-card"><div class="feat-num">04</div><div class="feat-ico">🧠</div><div class="feat-title">Chapter Quizzes</div><div class="feat-desc">MCQ practice with instant feedback and score tracking</div></div>
+      <div class="feat-card"><div class="feat-num">05</div><div class="feat-ico">📋</div><div class="feat-title">Study Planner</div><div class="feat-desc">Tasks with subject tags, priorities, marks weight and due date alerts</div></div>
+      <div class="feat-card"><div class="feat-num">06</div><div class="feat-ico">🎨</div><div class="feat-title">4 Heritage Themes</div><div class="feat-desc">Rajasthani, Mandala, Kalamkari & Tanjore — or extract from your own photo</div></div>
+    </div>
+  </div>
+
+  <div class="footer-line">Mathematics · Science · Social Science · English &nbsp;·&nbsp; Class 10 CBSE</div>
+</main>
+
+<script src="js/app.js"></script>
+<script src="js/theme_todo.js"></script>
+<script>
+const ARTS={rajasthani:'assets/bg-pattern.png',mandala:'assets/theme-mandala.png',kalamkari:'assets/theme-kalamkari.png',tanjore:'assets/theme-tanjore.png'};
+
+function switchTheme(el,scheme){
+  document.querySelectorAll('.ht-dot').forEach(d=>d.classList.remove('active'));
+  el.classList.add('active');
+  document.documentElement.setAttribute('data-scheme',scheme);
+  localStorage.setItem('vm_scheme',scheme);
+  const art=document.getElementById('heroArt');
+  if(art) art.style.backgroundImage=`url('${ARTS[scheme]}')`;
+}
+
+App.applyMode(); ThemeEngine.loadSaved();
+const cur=localStorage.getItem('vm_scheme')||'rajasthani';
+document.querySelectorAll('.ht-dot').forEach(d=>d.classList.toggle('active',d.dataset.scheme===cur));
+const heroArt=document.getElementById('heroArt');
+if(heroArt) heroArt.style.backgroundImage=`url('${ARTS[cur]}')`;
+
+// Lotus particles
+(function(){
+  const f=document.getElementById('lotusField');
+  if(!f) return;
+  ['🪷','❋','✿','❀','✾'].forEach((s,i)=>{
+    for(let j=0;j<3;j++){
+      const el=document.createElement('span');
+      el.className='lotus-p';
+      el.textContent=s;
+      const sz=11+Math.random()*14;
+      el.style.cssText=`left:${Math.random()*100}%;bottom:${Math.random()*50}%;--ps:${sz}px;--pd:${6+Math.random()*7}s;--pdelay:${(i*3+j*2)*Math.random()*1.5}s`;
+      f.appendChild(el);
+    }
+  });
+})();
+</script>
+<script src="js/music.js"></script>
+</body>
+</html>
